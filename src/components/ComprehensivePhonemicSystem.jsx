@@ -75,17 +75,16 @@ const ComprehensivePhonemicSystem = () => {
     'æ': { high: '-', low: '+', front: '+', consonantal: '-' },
     'u': { high: '+', low: '-', front: '-', consonantal: '-' },
     'o': { high: '-', low: '-', front: '-', consonantal: '-' },
-    'ɑ': { high: '-', low: '+', front: '-', consonantal: '-' },
+    'ɒ': { high: '-', low: '+', front: '-', consonantal: '-' },
     // English consonants
-    't': { high: '±', low: '±', front: '+', occlusive: '+', consonantal: '+' },
     'θ': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
-    'l': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
-    'r': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
-    'n': { high: '±', low: '±', front: '+', nasal: '+', consonantal: '+' }
+    'l': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '±' },
+    'r': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '±' },
+    'n': { high: '±', low: '±', front: '±', nasal: '+', consonantal: '±' }
   });
 
   // All possible binary features for display
-  const allBinaryFeatures = ['high', 'low', 'front', 'voice', 'occlusive', 'nasal', 'consonantal'];
+  const allBinaryFeatures = ['high', 'low', 'front', 'voice', 'occlusive', 'nasal', 'consonantal', 'obstruent'];
 
   // Core language data
   const languageData = {
@@ -160,28 +159,47 @@ const ComprehensivePhonemicSystem = () => {
       family: "Indo-European > Germanic",
       coordinates: [52.0, -1.0],
       surfacePhonemes: ["ɪ", "ɛ", "æ", "ʊ", "ʌ", "ɒ"],
-      elementarySegments: ["i", "e", "æ", "u", "o", "ɑ"],
-      suprasegmentals: ["length"],
+      elementarySegments: ["i", "e", "æ", "u", "o", "ɒ", "r", "j", "w"],
+      suprasegmentals: ["stress"],
       features: 7,
       surfaceMappings: [
-        { surface: "ɪ", elementary: "i", notes: "+high, +front elementary" },
-        { surface: "ɛ", elementary: "e", notes: "-high, -low, +front elementary" },
-        { surface: "æ", elementary: "æ", notes: "-high, +low, +front elementary" },
-        { surface: "ʊ", elementary: "u", notes: "+high, -front elementary" },
-        { surface: "ʌ", elementary: "o", notes: "-high, -low, -front elementary" },
-        { surface: "ɒ", elementary: "ɑ", notes: "-high, +low, -front elementary" }
+        { surface: "ɪ", elementary: "i", notes: "elementary; KIT vowel" },
+        { surface: "ɛ", elementary: "e", notes: "elementary; DRESS vowel" },
+        { surface: "æ", elementary: "æ", notes: "elementary; TRAP vowel" },
+        { surface: "ʊ", elementary: "u", notes: "elementary; FOOT vowel" },
+        { surface: "ʌ", elementary: "o", notes: "elementary; STRUT vowel" },
+        { surface: "ɒ", elementary: "ɒ", notes: "elementary; LOT vowel" },
+        { surface: "ə", elementary: "r", notes: "commA vowel; not necessarily phonemic, usually analyzed as one of very few underlying vowels that surface in open syllables, if analyzed as a separate phoneme at all"},
+        { surface: "ər", elementary: "rr", notes: "lettER vowel; not necessarily a single phoneme, usually analyzed as a /Vr/ cluster"},
+        { surface: "i", elementary: "j", notes: "happY vowel; marginal, not necessarily phonemic, usually analyzed as one of very few underlying vowels that surface in open syllables, if analyzed as a separate phoneme at all"}, 
+        { surface: "iː", elementary: "ij", notes: "FLEECE vowel" },
+        { surface: "eɪ", elementary: "ej", notes: "FACE vowel" },
+        { surface: "æː", elementary: "æj", notes: "BATH vowel" },
+        { surface: "ɔɪ", elementary: "uj", notes: "CHOICE vowel" },
+        { surface: "aɪ", elementary: "oj", notes: "PRICE vowel" },
+        { surface: "ɑː", elementary: "ɒj", notes: "PALM vowel" },
+        { surface: "aʊ", elementary: "ew", notes: "MOUTH vowel" },
+        { surface: "ɒː", elementary: "æw", notes: "CLOTH vowel" }, 
+        { surface: "uː", elementary: "uw", notes: "GOOSE vowel" },
+        { surface: "əʊ", elementary: "ow", notes: "GOAT vowel" },
+        { surface: "ɔː", elementary: "ɒw", notes: "THOUGHT vowel" },
+        { surface: "ɪə", elementary: "ir", notes: "NEAR vowel" },
+        { surface: "ɛː", elementary: "er", notes: "SQUARE vowel" },
+        { surface: "ɑː", elementary: "ær", notes: "START vowel" },
+        { surface: "ʊə", elementary: "ur", notes: "CURE vowel" },
+        { surface: "ɔː", elementary: "or", notes: "FORCE vowel" },
+        { surface: "ɒː", elementary: "ɒr", notes: "NORTH vowel" },
+        { surface: "ɜː", elementary: "jr", notes: "NURSE vowel; curl-coil merger" },
+
       ]
     }
   };
 
   useEffect(() => {
-    const storedLanguages = localStorage.getItem('phonenicAnalysisLanguages');
-    if (storedLanguages) {
-      setLanguages(JSON.parse(storedLanguages));
-    } else {
-      setLanguages(Object.values(languageData));
-    }
-  }, []);
+    // Always use the data from  code, ignore localStorage
+    setLanguages(Object.values(languageData));
+  }, []
+  );
 
   // Save to localStorage whenever languages change
   useEffect(() => {
@@ -344,13 +362,14 @@ const ComprehensivePhonemicSystem = () => {
       setImportStep('map');
     };
     reader.readAsText(file);
-  }, []);
+  }, []
+);
 
   const exportTemplate = () => {
     const template = `language_name,language_family,iso_code,latitude,longitude,surface_phonemes,elementary_segments,suprasegmentals,surface_count,elementary_count
 Rotokas,North Bougainville,roo,-6.2,155.2,"p t k b d g m n ŋ a e i o u aː eː iː oː uː","a ə w j k",length,19,5
 Hawaiian,Austronesian,haw,21.3,-157.8,"m n l p t ʔ h w i iː u uː e eː a aː o oː iu ou oi eu ei au ai ao ae oːu eːi aːu aːi aːo aːe","a ə w j ʔ h",length,33,6
-English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɑ",length,6,6`;
+English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,6`;
 
     const blob = new Blob([template], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -611,8 +630,8 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɑ",length,6,
     };
 
     const updateSuprasegmentals = (value) => {
-      const suprasegmentals = typeof value === 'string' 
-        ? value.split(/[,\s]+/).filter(s => s.trim())
+      const suprasegmentals = typeof value === 'string'  
+        ? value.split(',').map(s => s.trim()).filter(s => s)  // ← Fixed: only splits on commas
         : value;
       setEditing(prev => ({...prev, suprasegmentals}));
     };
@@ -660,6 +679,9 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɑ",length,6,
     };
 
     const updateSegmentFeature = (segment, feature, value) => {
+      // Only update if we're in editing mode and have a selected segment
+      if (!editing || !localSelectedSegment) return;
+  
       setSegmentFeatures(prev => ({
         ...prev,
         [segment]: {
