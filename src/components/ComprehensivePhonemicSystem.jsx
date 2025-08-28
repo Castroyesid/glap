@@ -746,7 +746,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
 
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 overflow-y-auto flex-1">
   <div className="grid grid-cols-2 gap-6 h-full">
     {/* Left Column - Info and Features */}
     <div className="space-y-4">
@@ -762,7 +762,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           Language Information {showInfo ? '(click to hide)' : '(click to show)'}
         </button>
         {showInfo && (
-          <div className="px-4 pb-4">
+          <div className="px-4 pb-4" onClick={(e) => e.stopPropagation()}>
             <div className="text-sm space-y-2">
               <div><strong className="text-gray-700">Family:</strong> <span className="text-gray-900">{language.family}</span></div>
               <div><strong className="text-gray-700">Surface Phonemes:</strong> <span className="text-blue-600 font-semibold">{language.surfacePhonemes?.length || 0}</span></div>
@@ -787,7 +787,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           Elementary Segments & Features {showFeatures ? '(click to show)' : '(click to hide)'}
         </button>
         {showFeatures && (
-          <div className="px-4 pb-4">
+          <div className="px-4 pb-4" onClick={(e) => e.stopPropagation()}>
             <h5 className="font-medium mb-3 text-gray-900">Elementary Segments (Click to see features)</h5>
             <div className="flex flex-wrap gap-2 mb-4">
               {(language.elementarySegments || []).map(segment => (
@@ -818,7 +818,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
 
     {/* Right Column - Surface Mappings */}
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-      <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl">
+      <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h4 className="font-semibold text-gray-900">Surface Mappings ({language.surfaceMappings?.length || 0} total)</h4>
           <div className="flex space-x-2">
@@ -828,7 +828,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
         </div>
       </div>
       
-      <div className="p-6 overflow-y-auto">
+      <div className="p-6 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Your existing surface mappings table goes here */}
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -1301,7 +1301,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
             />
           </div>
           
-          <div className="p-6 overflow-y-auto flex-1" onClick={(e) => e.stopPropagation()}>
+          <div className="p-6 overflow-y-auto flex-1">
             {filterType === 'all' || type !== 'surface' ? (
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                 {content.items.map(([item, count]) => (
