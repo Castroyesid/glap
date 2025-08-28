@@ -877,18 +877,18 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                         const isFeatureUsed = usedFeatures.has(feature);
                         
                         const getFeatureColor = () => {
-                          if (!isFeatureUsed) return 'text-gray-300 cursor-not-allowed bg-gray-50';
+                          if (!isFeatureUsed) return 'text-gray-400 cursor-not-allowed bg-gray-100';
                           if (isSelectedFeature) {
-                            if (localFeatureState === 'plus') return 'bg-green-300 text-green-900 shadow-md';
-                            if (localFeatureState === 'minus') return 'bg-red-300 text-red-900 shadow-md';
-                            return 'bg-gray-300 text-gray-900 shadow-md';
+                            if (localFeatureState === 'plus') return 'bg-green-200 text-green-800 border border-green-300';
+                            if (localFeatureState === 'minus') return 'bg-red-200 text-red-800 border border-red-300';
+                            return 'bg-gray-200 text-gray-800 border border-gray-300';
                           }
                           if (isActiveForSegment && localSelectedSegment) {
                             if (segmentFeature === '+') return 'bg-green-100 text-green-800 hover:bg-green-200 border border-green-200';
                             if (segmentFeature === '-') return 'bg-red-100 text-red-800 hover:bg-red-200 border border-red-200';
                             if (segmentFeature === '±') return 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300';
                           }
-                          return 'text-gray-600 hover:text-gray-800 hover:bg-gray-100';
+                          return 'text-gray-700 hover:text-gray-900 hover:bg-gray-200 bg-gray-100 border border-gray-200';
                         };
                         
                         return (
@@ -981,11 +981,11 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="sticky top-0 bg-gray-50">
                         <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
+                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
                           {editing && (
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                           )}
                         </tr>
                       </thead>
@@ -1187,13 +1187,6 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">Language Inventory</h3>
-              <button
-                onClick={() => setShowAddLanguage(true)}
-                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 shadow-md transition-all"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Language
-              </button>
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -1528,35 +1521,6 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           <div className="px-6 py-4 border-b bg-gray-50 flex-shrink-0">
             <p className="text-gray-600 mb-3">{content.totalCount} total {type} across all languages</p>
             
-            {type === 'surface' && (
-              <div className="flex space-x-2 mb-3">
-                <button
-                  onClick={() => setFilterType('all')}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                    filterType === 'all' ? 'bg-blue-500 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                  }`}
-                >
-                  All ({content.totalCount})
-                </button>
-                <button
-                  onClick={() => setFilterType('vowels')}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                    filterType === 'vowels' ? 'bg-blue-500 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                  }`}
-                >
-                  Vowels
-                </button>
-                <button
-                  onClick={() => setFilterType('consonants')}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                    filterType === 'consonants' ? 'bg-blue-500 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                  }`}
-                >
-                  Consonants
-                </button>
-              </div>
-            )}
-            
             <input
               type="text"
               placeholder="Search segments..."
@@ -1600,10 +1564,10 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
     <div className="max-w-7xl mx-auto p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Comprehensive Phonemic Analysis System
+            Global Linguistic Analaysis Project
           </h1>
           <p className="text-gray-600 text-lg">
-            Systematic decomposition, validation, and cross-linguistic comparison of phonemic inventories
+            Practical Applications of Impractical Phonemic Analyses
           </p>
         </div>
 
@@ -1613,7 +1577,6 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
               { id: 'overview', name: 'Overview', icon: Database },
               { id: 'validation', name: 'Validation', icon: CheckCircle },
               { id: 'comparison', name: 'Comparison', icon: BarChart3 },
-              { id: 'import', name: 'Import', icon: Upload }
             ].map(({ id, name, icon: Icon }) => (
               <button
                 key={id}
