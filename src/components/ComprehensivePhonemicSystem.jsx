@@ -740,30 +740,26 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                   style={{ fill: 'white', stroke: 'white', color: 'white' }}
                 />
               </button>
-              <button
-                onClick={handleClose}
-                style={{ color: 'white' }}
-                className="hover:opacity-75 transition-opacity text-xl font-bold"
-              >
-                X
-              </button>
             </div>
           </div>
           
 
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-6 overflow-y-auto flex-1" onClick={(e) => e.stopPropagation()}>
   <div className="grid grid-cols-2 gap-6 h-full">
     {/* Left Column - Info and Features */}
     <div className="space-y-4">
       {/* Collapsible Language Info */}
       <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200">
-        <button 
-          onClick={() => setShowInfo(!showInfo)}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowInfo(!showInfo);
+          }} 
           className="w-full px-4 py-3 text-left font-semibold text-gray-900 hover:bg-gray-50 rounded-t-xl transition-colors"
         >
-          Language Information {showInfo ? '−' : '+'}
+          Language Information {showInfo ? '(click to hide)' : '(click to show)'}
         </button>
         {showInfo && (
           <div className="px-4 pb-4">
@@ -782,10 +778,13 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
       {/* Collapsible Elementary Segments */}
       <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-200">
         <button 
-          onClick={() => setShowFeatures(!showFeatures)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowFeatures(!showFeatures);
+          }} 
           className="w-full px-4 py-3 text-left font-semibold text-gray-900 hover:bg-purple-50 rounded-t-xl transition-colors"
         >
-          Elementary Segments & Features {showFeatures ? '−' : '+'}
+          Elementary Segments & Features {showFeatures ? '(click to show)' : '(click to hide)'}
         </button>
         {showFeatures && (
           <div className="px-4 pb-4">
@@ -1302,7 +1301,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
             />
           </div>
           
-          <div className="p-6 overflow-y-auto flex-1">
+          <div className="p-6 overflow-y-auto flex-1" onClick={(e) => e.stopPropagation()}>
             {filterType === 'all' || type !== 'surface' ? (
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                 {content.items.map(([item, count]) => (
