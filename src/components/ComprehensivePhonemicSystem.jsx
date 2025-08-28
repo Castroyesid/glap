@@ -19,7 +19,6 @@ const ComprehensivePhonemicSystem = () => {
     elementarySegments: [],
     suprasegmentals: [],
     features: 0,
-    complexity: 'Simple',
     surfaceMappings: []
   });
 
@@ -59,83 +58,70 @@ const ComprehensivePhonemicSystem = () => {
     }
   };
   
-  // Feature specifications for elementary segments (only phonemically contrastive features)
-  const segmentFeatures = {
-    // Rotokas - phonemically contrastive features only
-    'a': { high: '-', front: '0', occlusive: '0', consonantal: '-' },
-    'ə': { high: '+', front: '0', occlusive: '0', consonantal: '-' },
-    'w': { high: '0', front: '±', occlusive: '0', consonantal: '+' },
-    'j': { high: '0', front: '+', occlusive: '0', consonantal: '+' },
-    'k': { high: '0', front: '-', occlusive: '+', consonantal: '+' },
+  // Feature specifications for elementary segments
+  const [segmentFeatures, setSegmentFeatures] = useState({
+    // Rotokas
+    'a': { high: '-', front: '±', occlusive: '±', consonantal: '-' },
+    'ə': { high: '+', front: '±', occlusive: '±', consonantal: '-' },
+    'w': { high: '±', front: '±', occlusive: '±', consonantal: '+' },
+    'j': { high: '±', front: '+', occlusive: '±', consonantal: '+' },
+    'k': { high: '±', front: '-', occlusive: '+', consonantal: '+' },
     // Hawaiian
-    'ʔ': { high: '0', front: '-', voice: '-', occlusive: '+', consonantal: '+' },
-    'h': { high: '0', front: '-', voice: '-', occlusive: '-', consonantal: '+' },
-    // English vowels - phonemically contrastive
+    'ʔ': { high: '±', front: '-', voice: '-', occlusive: '+', consonantal: '+' },
+    'h': { high: '±', front: '-', voice: '-', occlusive: '-', consonantal: '+' },
+    // English vowels
     'i': { high: '+', low: '-', front: '+', consonantal: '-' },
     'e': { high: '-', low: '-', front: '+', consonantal: '-' },
     'æ': { high: '-', low: '+', front: '+', consonantal: '-' },
     'u': { high: '+', low: '-', front: '-', consonantal: '-' },
     'o': { high: '-', low: '-', front: '-', consonantal: '-' },
     'ɑ': { high: '-', low: '+', front: '-', consonantal: '-' },
-    // English consonants - phonemically contrastive
-    't': { high: '0', low: '0', front: '+', occlusive: '+', consonantal: '+' },
-    'θ': { high: '0', low: '0', front: '+', occlusive: '-', consonantal: '+' },
-    'l': { high: '0', low: '0', front: '+', occlusive: '-', consonantal: '+' },
-    'r': { high: '0', low: '0', front: '+', occlusive: '-', consonantal: '+' },
-    'n': { high: '0', low: '0', front: '+', nasal: '+', consonantal: '+' }
-  };
+    // English consonants
+    't': { high: '±', low: '±', front: '+', occlusive: '+', consonantal: '+' },
+    'θ': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
+    'l': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
+    'r': { high: '±', low: '±', front: '+', occlusive: '-', consonantal: '+' },
+    'n': { high: '±', low: '±', front: '+', nasal: '+', consonantal: '+' }
+  });
 
   // All possible binary features for display
   const allBinaryFeatures = ['high', 'low', 'front', 'voice', 'occlusive', 'nasal', 'consonantal'];
 
-  // Enhanced mock data with proper English complexity
-  const mockData = {
+  // Core language data
+  const languageData = {
     rotokas: {
       id: 1,
       name: "Rotokas",
       family: "North Bougainville", 
       coordinates: [-6.2, 155.2],
       surfacePhonemes: [
-        // Central Rotokas consonants
-        "p", "t", "k", "b", "d", "g",
-        // Aita Rotokas additional nasals
-        "m", "n", "ŋ",
-        // Central Rotokas vowels  
-        "a", "e", "i", "o", "u",
-        // Central Rotokas long vowels
-        "aː", "eː", "iː", "oː", "uː"
+        "p", "t", "k", "b", "d", "g", "m", "n", "ŋ",
+        "a", "e", "i", "o", "u", "aː", "eː", "iː", "oː", "uː"
       ],
       elementarySegments: ["a", "ə", "w", "j", "k"],
       suprasegmentals: ["length"],
       features: 4,
-      complexity: "Simple",
       dialectNotes: "Long vowels phonemic in Central Rotokas only; nasal consonants phonemic in Aita Rotokas only",
       surfaceMappings: [
-        // Voiceless consonants (Ck = voiceless)
         { surface: "p", elementary: "wk", notes: "Ck = voiceless consonant" },
         { surface: "t", elementary: "jk", notes: "Ck = voiceless consonant" },
         { surface: "k", elementary: "kk", notes: "Ck = voiceless consonant" },
-        // Voiced consonants (C alone = voiced)
         { surface: "b", elementary: "w", notes: "voiced, underlyingly nasal" },
         { surface: "d", elementary: "j", notes: "voiced, underlyingly nasal" },
         { surface: "g", elementary: "k", notes: "voiced, underlyingly nasal" },
-        // Nasal consonants (CkC = nasal due to underlyingly nasal C) - only phonemic in Aita Rotokas
         { surface: "m", elementary: "wkw", notes: "nasal due to underlyingly nasal w (Aita Rotokas only)" },
         { surface: "n", elementary: "jkj", notes: "nasal due to underlyingly nasal j (Aita Rotokas only)" },
         { surface: "ŋ", elementary: "kkj", notes: "nasal due to underlyingly nasal j (Aita Rotokas only)" },
-        // Basic vowels
         { surface: "a", elementary: "a", notes: "low vowel elementary" },
         { surface: "e", elementary: "ə", notes: "high vowel elementary" },
-        // Complex vowels
         { surface: "i", elementary: "əj", notes: "high (ə) + front (j)" },
         { surface: "o", elementary: "aw", notes: "mid (a) + back (w)" },
         { surface: "u", elementary: "əw", notes: "high (ə) + back (w)" },
-        // Long vowels (with length suprasegmental) - only phonemic in Central Rotokas
-        { surface: "aː", elementary: "a:", notes: "low vowel + length (Central Rotokas only)" },
-        { surface: "eː", elementary: "ə:", notes: "high vowel + length (Central Rotokas only)" },
-        { surface: "iː", elementary: "əj:", notes: "high (ə) + front (j) + length (Central Rotokas only)" },
-        { surface: "oː", elementary: "aw:", notes: "mid (a) + back (w) + length (Central Rotokas only)" },
-        { surface: "uː", elementary: "əw:", notes: "high (ə) + back (w) + length (Central Rotokas only)" }
+        { surface: "aː", elementary: "a:", notes: "low vowel + length" },
+        { surface: "eː", elementary: "ə:", notes: "high vowel + length" },
+        { surface: "iː", elementary: "əj:", notes: "high (ə) + front (j) + length" },
+        { surface: "oː", elementary: "aw:", notes: "mid (a) + back (w) + length" },
+        { surface: "uː", elementary: "əw:", notes: "high (ə) + back (w) + length" }
       ]
     },
     hawaiian: {
@@ -144,31 +130,15 @@ const ComprehensivePhonemicSystem = () => {
       family: "Austronesian > Oceanic",
       coordinates: [21.3, -157.8], 
       surfacePhonemes: [
-        // Consonants
         "m", "n", "l", "p", "t", "ʔ", "h", "w",
-        // Surface vowels (with length marked by ː)
         "i", "iː", "u", "uː", "e", "eː", "a", "aː", "o", "oː", 
-        // Surface diphthongs
         "iu", "ou", "oi", "eu", "ei", "au", "ai", "ao", "ae",
-        // Surface long diphthongs  
         "oːu", "eːi", "aːu", "aːi", "aːo", "aːe"
-      ],
-      analyzedPhonemes: [
-        // Consonants
-        "m", "n", "l", "p", "t", "ʔ", "h", "w",
-        // Analyzed vowels (length as doubling)
-        "a", "e", "i", "o", "u", "aa", "ee", "ii", "oo", "uu",
-        // Analyzed diphthongs
-        "ai", "au", "ei", "eu", "iu", "oi", "ou", "ao", "ae",
-        // Analyzed long diphthongs
-        "aai", "aau", "aao", "aae", "eei", "oou"
       ],
       elementarySegments: ["a", "ə", "w", "j", "ʔ", "h"],
       suprasegmentals: ["length"],
       features: 4,
-      complexity: "Simple",
       surfaceMappings: [
-        // Consonants
         { surface: "m", elementary: "ʔw", notes: "ʔw = nasal (no h marker)" },
         { surface: "n", elementary: "ʔj", notes: "ʔj = nasal (no h marker)" },
         { surface: "p", elementary: "ʔwh", notes: "ʔwh = voiceless stop" },
@@ -177,35 +147,11 @@ const ComprehensivePhonemicSystem = () => {
         { surface: "ʔ", elementary: "ʔ", notes: "elementary segment" },
         { surface: "h", elementary: "h", notes: "elementary segment" },
         { surface: "w", elementary: "w", notes: "elementary segment" },
-        // Basic vowels
         { surface: "a", elementary: "a", notes: "elementary vowel" },
         { surface: "e", elementary: "ə", notes: "elementary vowel" },
         { surface: "i", elementary: "əj", notes: "high front = ə + j" },
         { surface: "o", elementary: "aw", notes: "mid back = a + w" },
-        { surface: "u", elementary: "əw", notes: "high back = ə + w" },
-        // Long vowels (surface iː → analyzed ii → elementary with length suprasegmental)
-        { surface: "iː", elementary: "əj:", notes: "ii = əj + length" },
-        { surface: "uː", elementary: "əw:", notes: "uu = əw + length" },
-        { surface: "eː", elementary: "ə:", notes: "ee = ə + length" },
-        { surface: "aː", elementary: "a:", notes: "aa = a + length" },
-        { surface: "oː", elementary: "aw:", notes: "oo = aw + length" },
-        // Diphthongs
-        { surface: "ai", elementary: "aəj", notes: "a + i diphthong" },
-        { surface: "au", elementary: "aəw", notes: "a + u diphthong" },
-        { surface: "ei", elementary: "əəj", notes: "e + i diphthong" },
-        { surface: "eu", elementary: "əəw", notes: "e + u diphthong" },
-        { surface: "iu", elementary: "əjəw", notes: "i + u diphthong" },
-        { surface: "oi", elementary: "awəj", notes: "o + i diphthong" },
-        { surface: "ou", elementary: "awəw", notes: "o + u diphthong" },
-        { surface: "ao", elementary: "aaw", notes: "a + o diphthong" },
-        { surface: "ae", elementary: "aə", notes: "a + e diphthong" },
-        // Long diphthongs
-        { surface: "oːu", elementary: "awəw:", notes: "oou = awəw + length" },
-        { surface: "eːi", elementary: "əəj:", notes: "eei = əəj + length" },
-        { surface: "aːu", elementary: "aəw:", notes: "aau = aəw + length" },
-        { surface: "aːi", elementary: "aəj:", notes: "aai = aəj + length" },
-        { surface: "aːo", elementary: "aaw:", notes: "aao = aaw + length" },
-        { surface: "aːe", elementary: "aə:", notes: "aae = aə + length" }
+        { surface: "u", elementary: "əw", notes: "high back = ə + w" }
       ]
     },
     english: {
@@ -213,36 +159,17 @@ const ComprehensivePhonemicSystem = () => {
       name: "English",
       family: "Indo-European > Germanic",
       coordinates: [52.0, -1.0],
-      surfacePhonemes: [
-        // ANAE vowel keywords with surface forms
-        "æ", "æː", "ɑː", "ɒ", "ɒː", "ɔː", "ɪ", "ɛ", "ʌ", "ʊ", 
-        "eɪ", "əʊ", "iː", "uː", "aɪ", "ɔɪ", "aʊ", "ɜː", "ɑː", "ɔː", 
-        "ɒː", "ɪə", "ɛː", "ʊə", "ə", "ər", "i",
-        // Consonants
-        "m", "n", "ŋ", "p", "t", "tʃ", "k", "ʔ", "b", "d", "dʒ", "g",
-        "f", "θ", "s", "ʃ", "h", "v", "ð", "z", "ʒ", "l", "r", "j", "w"
-      ],
-      analyzedPhonemes: [
-        // Labov-style VC analysis
-        "æ", "æh", "ah", "a", "oh", "oh", "i", "e", "o", "u",
-        "ej", "ow", "ij", "uw", "aj", "oj", "aw", "ər", "ær", "or",
-        "ar", "ir", "er", "ur", "ə", "ər", "i",
-        // Consonants (unchanged)
-        "m", "n", "ŋ", "p", "t", "tʃ", "k", "ʔ", "b", "d", "dʒ", "g",
-        "f", "θ", "s", "ʃ", "h", "v", "ð", "z", "ʒ", "l", "r", "j", "w"
-      ],
-      elementarySegments: ["i", "e", "æ", "u", "o", "ɑ", "t", "θ", "ʔ", "w", "j", "l", "r", "n"],
+      surfacePhonemes: ["ɪ", "ɛ", "æ", "ʊ", "ʌ", "ɒ"],
+      elementarySegments: ["i", "e", "æ", "u", "o", "ɑ"],
       suprasegmentals: ["length"],
       features: 7,
-      complexity: "Medium",
       surfaceMappings: [
-        // Elementary vowels
-        { surface: "ɪ", elementary: "i", rule: "+high, +front elementary" },
-        { surface: "ɛ", elementary: "e", rule: "-high, -low, +front elementary" },
-        { surface: "æ", elementary: "æ", rule: "-high, +low, +front elementary" },
-        { surface: "ʊ", elementary: "u", rule: "+high, -front elementary" },
-        { surface: "ʌ", elementary: "o", rule: "-high, -low, -front elementary" },
-        { surface: "ɒ", elementary: "ɑ", rule: "-high, +low, -front elementary" }
+        { surface: "ɪ", elementary: "i", notes: "+high, +front elementary" },
+        { surface: "ɛ", elementary: "e", notes: "-high, -low, +front elementary" },
+        { surface: "æ", elementary: "æ", notes: "-high, +low, +front elementary" },
+        { surface: "ʊ", elementary: "u", notes: "+high, -front elementary" },
+        { surface: "ʌ", elementary: "o", notes: "-high, -low, -front elementary" },
+        { surface: "ɒ", elementary: "ɑ", notes: "-high, +low, -front elementary" }
       ]
     }
   };
@@ -252,7 +179,7 @@ const ComprehensivePhonemicSystem = () => {
     if (storedLanguages) {
       setLanguages(JSON.parse(storedLanguages));
     } else {
-      setLanguages(Object.values(mockData));
+      setLanguages(Object.values(languageData));
     }
   }, []);
 
@@ -278,7 +205,8 @@ const ComprehensivePhonemicSystem = () => {
       suprasegmentals: typeof newLanguage.suprasegmentals === 'string'
         ? newLanguage.suprasegmentals.split(/[,\s]+/).filter(s => s.trim())
         : newLanguage.suprasegmentals,
-      surfaceMappings: newLanguage.surfaceMappings || []
+      surfaceMappings: newLanguage.surfaceMappings || [],
+      dialectNotes: ''
     };
     
     setLanguages(prev => [...prev, languageToAdd]);
@@ -290,25 +218,25 @@ const ComprehensivePhonemicSystem = () => {
       elementarySegments: [],
       suprasegmentals: [],
       features: 0,
-      complexity: 'Simple',
       surfaceMappings: []
     });
     setShowAddLanguage(false);
   };
 
-  // Delete language
+  // Delete language with confirmation
   const deleteLanguage = (id) => {
-    setLanguages(prev => prev.filter(lang => lang.id !== id));
-    if (selectedLanguage && selectedLanguage.id === id) {
-      setSelectedLanguage(null);
+    if (window.confirm('Are you sure you want to delete this language? This action cannot be undone.')) {
+      setLanguages(prev => prev.filter(lang => lang.id !== id));
+      if (selectedLanguage && selectedLanguage.id === id) {
+        setSelectedLanguage(null);
+      }
     }
   };
 
-  // Real validation logic
+  // Validation logic
   const validateLanguage = (language) => {
     const results = {};
     
-    // 1. Completeness: All surface phonemes have mappings
     const mappedSurface = new Set(language.surfaceMappings.map(m => m.surface));
     const unmappedPhonemes = language.surfacePhonemes.filter(p => !mappedSurface.has(p));
     
@@ -320,7 +248,6 @@ const ComprehensivePhonemicSystem = () => {
       details: unmappedPhonemes
     };
 
-    // 2. Minimality: All elementary segments are used
     const elementarySet = new Set(language.elementarySegments);
     const usedInMappings = new Set();
     
@@ -342,7 +269,6 @@ const ComprehensivePhonemicSystem = () => {
       details: unusedSegments
     };
 
-    // 3. Complexity: Track segment complexity distribution
     const optimized = language.surfaceMappings.filter(m => m.elementary.length <= 3);
     const complex = language.surfaceMappings.filter(m => m.elementary.length > 3 && m.elementary.length <= 6);
     const invalid = language.surfaceMappings.filter(m => m.elementary.length > 6);
@@ -375,7 +301,6 @@ const ComprehensivePhonemicSystem = () => {
     const intersection = new Set([...set1].filter(x => set2.has(x)));
     const union = new Set([...set1, ...set2]);
     
-    // Functional equivalence detection (k≈ʔ)
     const functionalEquivalents = { 'k': 'ʔ', 'ʔ': 'k' };
     let functionalIntersection = new Set(intersection);
     
@@ -423,9 +348,9 @@ const ComprehensivePhonemicSystem = () => {
 
   const exportTemplate = () => {
     const template = `language_name,language_family,iso_code,latitude,longitude,surface_phonemes,elementary_segments,suprasegmentals,surface_count,elementary_count
-Rotokas,North Bougainville,roo,-6.2,155.2,"p t k b d g m n ŋ a e i o u aː eː iː oː uː","a ə w j k",length,20,5
-Hawaiian,Austronesian,haw,21.3,-157.8,"m n l p t ʔ h w i iː u uː e eː a aː o oː iu ou oi eu ei au ai ao ae oːu eːi aːu aːi aːo aːe","a ə w j ʔ h",length,26,6
-English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ əʊ iː uː aɪ ɔɪ aʊ ɜː ɪə ɛː ʊə ə ər i m n ŋ p t tʃ k ʔ b d dʒ g f θ s ʃ h v ð z ʒ l r j w","i e æ u o ɑ t θ ʔ w j l r n",length,42,14`;
+Rotokas,North Bougainville,roo,-6.2,155.2,"p t k b d g m n ŋ a e i o u aː eː iː oː uː","a ə w j k",length,19,5
+Hawaiian,Austronesian,haw,21.3,-157.8,"m n l p t ʔ h w i iː u uː e eː a aː o oː iu ou oi eu ei au ai ao ae oːu eːi aːu aːi aːo aːe","a ə w j ʔ h",length,33,6
+English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɑ",length,6,6`;
 
     const blob = new Blob([template], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -442,12 +367,12 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
       onClick={() => setShowAddLanguage(false)}
     >
       <div 
-        className="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
+        className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl">
+        <div className="px-6 py-4 bg-gray-50 border-b">
           <h3 className="text-xl font-semibold">Add New Language</h3>
-          <p className="text-blue-100 text-sm">Enter phonemic analysis data for a new language</p>
+          <p className="text-gray-600 text-sm">Enter phonemic analysis data for a new language</p>
         </div>
         
         <div className="p-6 space-y-6">
@@ -458,7 +383,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                 type="text"
                 value={newLanguage.name}
                 onChange={(e) => setNewLanguage(prev => ({...prev, name: e.target.value}))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., Mandarin"
               />
             </div>
@@ -468,32 +393,20 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                 type="text"
                 value={newLanguage.family}
                 onChange={(e) => setNewLanguage(prev => ({...prev, family: e.target.value}))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., Sino-Tibetan"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Complexity</label>
-              <select
-                value={newLanguage.complexity}
-                onChange={(e) => setNewLanguage(prev => ({...prev, complexity: e.target.value}))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="Simple">Simple</option>
-                <option value="Medium">Medium</option>
-                <option value="Complex">Complex</option>
-              </select>
-            </div>
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Features Count</label>
               <input
                 type="number"
                 value={newLanguage.features}
                 onChange={(e) => setNewLanguage(prev => ({...prev, features: parseInt(e.target.value) || 0}))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 min="0"
               />
             </div>
@@ -507,7 +420,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                     ...prev, 
                     coordinates: [parseFloat(e.target.value) || 0, prev.coordinates[1]]
                   }))}
-                  className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-2 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   placeholder="Lat"
                 />
                 <input
@@ -517,7 +430,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                     ...prev,
                     coordinates: [prev.coordinates[0], parseFloat(e.target.value) || 0]
                   }))}
-                  className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="w-full px-2 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   placeholder="Long"
                 />
               </div>
@@ -529,7 +442,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
             <textarea
               value={Array.isArray(newLanguage.surfacePhonemes) ? newLanguage.surfacePhonemes.join(' ') : newLanguage.surfacePhonemes}
               onChange={(e) => setNewLanguage(prev => ({...prev, surfacePhonemes: e.target.value}))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               rows="3"
               placeholder="p t k b d g m n ŋ a e i o u (space or comma separated)"
             />
@@ -540,7 +453,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
             <textarea
               value={Array.isArray(newLanguage.elementarySegments) ? newLanguage.elementarySegments.join(' ') : newLanguage.elementarySegments}
               onChange={(e) => setNewLanguage(prev => ({...prev, elementarySegments: e.target.value}))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               rows="2"
               placeholder="a ə w j k (space or comma separated)"
             />
@@ -552,7 +465,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
               type="text"
               value={Array.isArray(newLanguage.suprasegmentals) ? newLanguage.suprasegmentals.join(', ') : newLanguage.suprasegmentals}
               onChange={(e) => setNewLanguage(prev => ({...prev, suprasegmentals: e.target.value}))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="length, tone (comma separated)"
             />
           </div>
@@ -567,7 +480,7 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
             <button
               onClick={addNewLanguage}
               disabled={!newLanguage.name.trim() || !newLanguage.family.trim()}
-              className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="px-6 py-2 bg-blue-500 text-white rounded-md font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Add Language
             </button>
@@ -576,6 +489,630 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
       </div>
     </div>
   );
+
+  // Language Detail Modal
+  const LanguageDetailModal = ({ language, onClose }) => {
+    const [localSelectedSegment, setLocalSelectedSegment] = useState(null);
+    const [localSelectedFeature, setLocalSelectedFeature] = useState(null);
+    const [localFeatureState, setLocalFeatureState] = useState('plus');
+    const [viewMode, setViewMode] = useState('list');
+    const [editing, setEditing] = useState(null);
+    const [newMapping, setNewMapping] = useState({ surface: '', elementary: '', notes: '' });
+    const [showAddMapping, setShowAddMapping] = useState(false);
+    const [editingFeatures, setEditingFeatures] = useState(false);
+
+    const handleClose = () => {
+      setLocalSelectedSegment(null);
+      setLocalSelectedFeature(null);
+      setLocalFeatureState('plus');
+      setEditing(null);
+      setNewMapping({ surface: '', elementary: '', notes: '' });
+      setShowAddMapping(false);
+      setEditingFeatures(false);
+      onClose();
+    };
+
+    // Get which features are actually used by this language's segments
+    const getUsedFeatures = () => {
+      const usedFeatures = new Set();
+      (language.elementarySegments || []).forEach(segment => {
+        const features = segmentFeatures[segment];
+        if (features) {
+          Object.entries(features).forEach(([feature, value]) => {
+            if (value === '+' || value === '-' || value === '±') {
+              usedFeatures.add(feature);
+            }
+          });
+        }
+      });
+      return usedFeatures;
+    };
+
+    const usedFeatures = getUsedFeatures();
+
+    const handleFeatureClick = (feature) => {
+      if (!usedFeatures.has(feature)) return;
+      
+      setLocalSelectedSegment(null);
+      if (localSelectedFeature === feature) {
+        if (localFeatureState === 'plus') {
+          setLocalFeatureState('minus');
+        } else if (localFeatureState === 'minus') {
+          setLocalSelectedFeature(null);
+          setLocalFeatureState('plus');
+        }
+      } else {
+        setLocalSelectedFeature(feature);
+        setLocalFeatureState('plus');
+      }
+    };
+
+    const handleSegmentClick = (segment) => {
+      setLocalSelectedFeature(null);
+      setLocalFeatureState('plus');
+      setLocalSelectedSegment(localSelectedSegment === segment ? null : segment);
+    };
+
+    const getHighlightedSegments = () => {
+      if (!localSelectedFeature || !usedFeatures.has(localSelectedFeature)) return [];
+      
+      return (language.elementarySegments || []).filter(segment => {
+        const segmentFeature = segmentFeatures[segment]?.[localSelectedFeature];
+        if (localFeatureState === 'plus') return segmentFeature === '+' || segmentFeature === '±';
+        if (localFeatureState === 'minus') return segmentFeature === '-' || segmentFeature === '±';
+        return false;
+      });
+    };
+
+    const getSegmentHighlightColor = () => {
+      if (!localSelectedFeature) return '';
+      if (localFeatureState === 'plus') return 'bg-green-200 text-green-900 border border-green-300';
+      if (localFeatureState === 'minus') return 'bg-red-200 text-red-900 border border-red-300';
+      return 'bg-gray-200 text-gray-900 border border-gray-300';
+    };
+
+    const getShowingTextColor = () => {
+      if (!localSelectedFeature) return '';
+      if (localFeatureState === 'plus') return 'bg-green-100 text-green-800';
+      if (localFeatureState === 'minus') return 'bg-red-100 text-red-800';
+      return 'bg-gray-100 text-gray-800';
+    };
+
+    const highlightedSegments = getHighlightedSegments();
+    const currentLanguage = editing || language;
+
+    const startEditing = () => {
+      const editingLang = {...language};
+      if (!editingLang.dialectNotes) {
+        editingLang.dialectNotes = '';
+      }
+      setEditing(editingLang);
+    };
+    
+    const saveEditing = () => {
+      setLanguages(prev => prev.map(lang => 
+        lang.id === editing.id ? editing : lang
+      ));
+      setEditing(null);
+      setSelectedLanguage(editing);
+    };
+
+    const cancelEditing = () => setEditing(null);
+
+    const updateField = (field, value) => {
+      setEditing(prev => ({...prev, [field]: value}));
+    };
+
+    const updateSurfacePhonemes = (value) => {
+      const surfacePhonemes = typeof value === 'string' 
+        ? value.split(/[,\s]+/).filter(p => p.trim())
+        : value;
+      setEditing(prev => ({...prev, surfacePhonemes}));
+    };
+
+    const updateSuprasegmentals = (value) => {
+      const suprasegmentals = typeof value === 'string' 
+        ? value.split(/[,\s]+/).filter(s => s.trim())
+        : value;
+      setEditing(prev => ({...prev, suprasegmentals}));
+    };
+
+    const autoGenerateMappings = () => {
+      if (!editing) return;
+      const existingMappings = new Set(editing.surfaceMappings.map(m => m.surface));
+      const newMappings = editing.surfacePhonemes
+        .filter(phoneme => !existingMappings.has(phoneme))
+        .map(phoneme => ({ surface: phoneme, elementary: '', notes: '' }));
+      
+      if (newMappings.length > 0) {
+        setEditing(prev => ({
+          ...prev,
+          surfaceMappings: [...prev.surfaceMappings, ...newMappings]
+        }));
+      }
+    };
+
+    const updateMapping = (index, field, value) => {
+      setEditing(prev => ({
+        ...prev,
+        surfaceMappings: prev.surfaceMappings.map((mapping, idx) =>
+          idx === index ? {...mapping, [field]: value} : mapping
+        )
+      }));
+    };
+
+    const addMapping = () => {
+      if (!newMapping.surface.trim() || !newMapping.elementary.trim()) return;
+      
+      setEditing(prev => ({
+        ...prev,
+        surfaceMappings: [...(prev.surfaceMappings || []), { ...newMapping }]
+      }));
+      setNewMapping({ surface: '', elementary: '', notes: '' });
+      setShowAddMapping(false);
+    };
+
+    const deleteMapping = (index) => {
+      setEditing(prev => ({
+        ...prev,
+        surfaceMappings: prev.surfaceMappings.filter((_, idx) => idx !== index)
+      }));
+    };
+
+    const updateSegmentFeature = (segment, feature, value) => {
+      setSegmentFeatures(prev => ({
+        ...prev,
+        [segment]: {
+          ...prev[segment],
+          [feature]: value
+        }
+      }));
+    };
+
+    return (
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        onClick={handleClose}
+      >
+        <div 
+          className="bg-white rounded-xl shadow-2xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl flex items-center justify-between flex-shrink-0">
+            <h3 className="text-xl font-semibold">{currentLanguage.name} Analysis</h3>
+            <div className="flex items-center space-x-3">
+              {editing ? (
+                <>
+                  <button
+                    onClick={saveEditing}
+                    className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors shadow-md"
+                  >
+                    <Save className="w-4 h-4 mr-1" />
+                    Save
+                  </button>
+                  <button
+                    onClick={cancelEditing}
+                    className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={startEditing}
+                  className="flex items-center px-4 py-2 bg-white bg-opacity-20 text-white rounded-lg font-medium hover:bg-opacity-30 transition-colors"
+                >
+                  <Edit2 className="w-4 h-4 mr-1" />
+                  Edit
+                </button>
+              )}
+              <button
+                onClick={handleClose}
+                className="text-blue-100 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="p-6 overflow-y-auto flex-1">
+            <div className="grid grid-cols-2 gap-8 mb-8">
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl border border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-4">Language Information</h4>
+                  <div className="text-sm space-y-3">
+                    <div className="flex items-center">
+                      <strong className="text-gray-700 w-32">Family:</strong> 
+                      {editing ? 
+                        <input
+                          value={editing.family}
+                          onChange={(e) => updateField('family', e.target.value)}
+                          className="ml-2 px-3 py-1 border border-gray-300 rounded-lg text-sm flex-1 focus:ring-2 focus:ring-blue-500"
+                        /> : 
+                        <span className="text-gray-900">{currentLanguage.family}</span>
+                      }
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <strong className="text-gray-700 w-32">Surface Phonemes:</strong> 
+                      {editing ? (
+                        <div className="ml-2 flex-1">
+                          <textarea
+                            value={Array.isArray(editing.surfacePhonemes) ? editing.surfacePhonemes.join(' ') : editing.surfacePhonemes || ''}
+                            onChange={(e) => updateSurfacePhonemes(e.target.value)}
+                            className="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                            rows="2"
+                            placeholder="ɪ ɛ æ ʊ ʌ ɒ (space separated)"
+                          />
+                          <div className="text-xs text-gray-500 mt-1">Count: {editing.surfacePhonemes?.length || 0}</div>
+                        </div>
+                      ) : (
+                        <span className="text-blue-600 font-semibold">{currentLanguage.surfacePhonemes?.length || 0}</span>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center">
+                      <strong className="text-gray-700 w-32">Elementary Segments:</strong> 
+                      {editing ? (
+                        <div className="ml-2 flex-1">
+                          <input
+                            value={Array.isArray(editing.elementarySegments) ? editing.elementarySegments.join(' ') : editing.elementarySegments || ''}
+                            onChange={(e) => setEditing(prev => ({
+                              ...prev,
+                              elementarySegments: e.target.value.split(/[,\s]+/).filter(s => s.trim())
+                            }))}
+                            className="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                            placeholder="i e æ u o ɑ (space separated)"
+                          />
+                          <div className="text-xs text-gray-500 mt-1">Count: {editing.elementarySegments?.length || 0}</div>
+                        </div>
+                      ) : (
+                        <span className="text-purple-600 font-semibold">{currentLanguage.elementarySegments?.length || 0}</span>
+                      )}
+                    </div>
+                    
+                    <div><strong className="text-gray-700">Binary Features:</strong> <span className="text-green-600 font-semibold">{currentLanguage.features}</span></div>
+                    
+                    <div className="flex items-start">
+                      <strong className="text-gray-700 w-32 flex-shrink-0">Suprasegmentals:</strong>
+                      {editing ? (
+                        <input
+                          value={Array.isArray(editing.suprasegmentals) ? editing.suprasegmentals.join(', ') : editing.suprasegmentals || ''}
+                          onChange={(e) => updateSuprasegmentals(e.target.value)}
+                          className="ml-2 px-3 py-1 border border-gray-300 rounded-lg text-sm flex-1 focus:ring-2 focus:ring-blue-500"
+                          placeholder="length, tone (comma separated)"
+                        />
+                      ) : (
+                        <span className="font-mono ml-2">{(currentLanguage.suprasegmentals || []).join(', ') || 'None'}</span>
+                      )}
+                    </div>
+                    
+                    <div className="pt-2">
+                      <strong className="text-gray-700">Notes:</strong> 
+                      {editing ?
+                        <textarea
+                          value={editing.dialectNotes || ''}
+                          onChange={(e) => updateField('dialectNotes', e.target.value)}
+                          className="ml-2 px-3 py-2 border border-gray-300 rounded-lg text-sm w-full mt-1 focus:ring-2 focus:ring-blue-500"
+                          rows="3"
+                          placeholder="Add notes about this language analysis..."
+                        /> : 
+                        <p className="text-gray-600 mt-1">{currentLanguage.dialectNotes || 'No notes added yet.'}</p>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border border-purple-200">
+                  <h4 className="font-semibold text-gray-900 mb-4">Elementary Segments (Click to see features)</h4>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {(currentLanguage.elementarySegments || []).map(segment => {
+                      const isHighlighted = highlightedSegments.includes(segment);
+                      const highlightClass = isHighlighted ? getSegmentHighlightColor() : '';
+                      return (
+                        <button
+                          key={segment}
+                          onClick={() => handleSegmentClick(segment)}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all shadow-sm ${
+                            localSelectedSegment === segment 
+                              ? 'bg-blue-500 text-white shadow-md' 
+                              : isHighlighted
+                              ? highlightClass
+                              : 'bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200'
+                          }`}
+                        >
+                          /{segment}/
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h5 className="font-medium text-sm mb-3 text-gray-900">
+                      Binary Features (Click to highlight segments)
+                      {localSelectedFeature && usedFeatures.has(localSelectedFeature) && (
+                        <span className={`ml-2 text-xs px-2 py-1 rounded ${getShowingTextColor()}`}>
+                          Showing {localFeatureState === 'plus' ? '+' : '-'}{localSelectedFeature}
+                        </span>
+                      )}
+                      {editing && (
+                        <button
+                          onClick={() => setEditingFeatures(!editingFeatures)}
+                          className="ml-4 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
+                        >
+                          {editingFeatures ? 'Done Editing' : 'Edit Features'}
+                        </button>
+                      )}
+                    </h5>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {allBinaryFeatures.map(feature => {
+                        const segmentFeature = localSelectedSegment ? segmentFeatures[localSelectedSegment]?.[feature] : null;
+                        const isActiveForSegment = segmentFeature && segmentFeature !== '±';
+                        const isSelectedFeature = localSelectedFeature === feature;
+                        const isFeatureUsed = usedFeatures.has(feature);
+                        
+                        const getFeatureColor = () => {
+                          if (!isFeatureUsed) return 'text-gray-300 cursor-not-allowed bg-gray-50';
+                          if (isSelectedFeature) {
+                            if (localFeatureState === 'plus') return 'bg-green-300 text-green-900 shadow-md';
+                            if (localFeatureState === 'minus') return 'bg-red-300 text-red-900 shadow-md';
+                            return 'bg-gray-300 text-gray-900 shadow-md';
+                          }
+                          if (isActiveForSegment && localSelectedSegment) {
+                            if (segmentFeature === '+') return 'bg-green-100 text-green-800 hover:bg-green-200 border border-green-200';
+                            if (segmentFeature === '-') return 'bg-red-100 text-red-800 hover:bg-red-200 border border-red-200';
+                            if (segmentFeature === '±') return 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300';
+                          }
+                          return 'text-gray-600 hover:text-gray-800 hover:bg-gray-100';
+                        };
+                        
+                        return (
+                          <div key={feature} className="flex items-center">
+                            <button
+                              onClick={() => isFeatureUsed ? handleFeatureClick(feature) : null}
+                              disabled={!isFeatureUsed}
+                              className={`px-2 py-1 rounded-md transition-all text-left font-medium flex-1 ${getFeatureColor()}`}
+                            >
+                              {isActiveForSegment && localSelectedSegment ? `${segmentFeature}${feature}` : feature}
+                            </button>
+                            {editingFeatures && editing && localSelectedSegment && (
+                              <select
+                                value={segmentFeatures[localSelectedSegment]?.[feature] || ''}
+                                onChange={(e) => updateSegmentFeature(localSelectedSegment, feature, e.target.value)}
+                                className="ml-1 text-xs border rounded px-1"
+                              >
+                                <option value="">—</option>
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                                <option value="±">±</option>
+                              </select>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-3 p-2 bg-gray-50 rounded">
+                      {localSelectedSegment ? 
+                        `Features for /${localSelectedSegment}/` : 
+                        "Click a segment above to see its features, or click features to highlight segments"
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+              <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-gray-900">Surface Mappings ({currentLanguage.surfaceMappings?.length || 0} total)</h4>
+                  <div className="flex items-center space-x-3">
+                    {editing && (
+                      <>
+                        <button
+                          onClick={autoGenerateMappings}
+                          className="flex items-center px-3 py-2 bg-yellow-500 text-white rounded-lg text-sm font-medium hover:bg-yellow-600 transition-colors"
+                        >
+                          Auto-Generate Missing
+                        </button>
+                        <button
+                          onClick={() => setShowAddMapping(true)}
+                          className="flex items-center px-3 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
+                        >
+                          <Plus className="w-4 h-4 mr-1" />
+                          Add Mapping
+                        </button>
+                      </>
+                    )}
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => setViewMode('list')}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          viewMode === 'list' 
+                            ? 'bg-blue-500 text-white shadow-md' 
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        List View
+                      </button>
+                      <button
+                        onClick={() => setViewMode('table')}
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          viewMode === 'table' 
+                            ? 'bg-blue-500 text-white shadow-md' 
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                      >
+                        Grid View
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-6">
+                {viewMode === 'list' ? (
+                  <div className="overflow-x-auto max-h-96">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="sticky top-0 bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
+                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                          {editing && (
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {(currentLanguage.surfaceMappings || []).map((mapping, idx) => (
+                          <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-4 py-3 text-sm font-mono">
+                              {editing ? (
+                                <input
+                                  value={mapping.surface}
+                                  onChange={(e) => updateMapping(idx, 'surface', e.target.value)}
+                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
+                                />
+                              ) : (
+                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium">/{mapping.surface}/</span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-sm font-mono">
+                              {editing ? (
+                                <input
+                                  value={mapping.elementary}
+                                  onChange={(e) => updateMapping(idx, 'elementary', e.target.value)}
+                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
+                                />
+                              ) : (
+                                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">/{mapping.elementary}/</span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-sm">
+                              {editing ? (
+                                <input
+                                  value={mapping.notes || mapping.rule || ''}
+                                  onChange={(e) => updateMapping(idx, 'notes', e.target.value)}
+                                  className="px-2 py-1 border border-gray-300 rounded text-sm w-full focus:ring-2 focus:ring-blue-500"
+                                />
+                              ) : (
+                                <span className="text-gray-600">{mapping.notes || mapping.rule}</span>
+                              )}
+                            </td>
+                            {editing && (
+                              <td className="px-4 py-3 text-sm">
+                                <button
+                                  onClick={() => deleteMapping(idx)}
+                                  className="text-red-600 hover:text-red-800 font-medium"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-96 overflow-y-auto">
+                    <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-lg border border-blue-200">
+                      <h5 className="font-medium mb-3 text-blue-900">Surface Inventory</h5>
+                      <div className="grid grid-cols-6 gap-2">
+                        {(currentLanguage.surfacePhonemes || []).map(phoneme => (
+                          <div key={phoneme} className="text-center text-sm font-mono bg-white p-2 rounded border border-blue-200 shadow-sm">
+                            /{phoneme}/
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-lg border border-purple-200">
+                      <h5 className="font-medium mb-3 text-purple-900">Elementary Inventory</h5>
+                      <div className="grid grid-cols-4 gap-2">
+                        {(currentLanguage.elementarySegments || []).map(segment => (
+                          <div key={segment} className="text-center text-sm font-mono bg-white p-2 rounded border border-purple-200 shadow-sm">
+                            /{segment}/
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Add Mapping Modal */}
+        {showAddMapping && editing && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60"
+            onClick={() => setShowAddMapping(false)}
+          >
+            <div 
+              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 bg-gray-50 border-b rounded-t-lg">
+                <h4 className="text-lg font-semibold text-gray-900">Add Surface Mapping</h4>
+              </div>
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Surface Phoneme</label>
+                  <input
+                    type="text"
+                    value={newMapping.surface}
+                    onChange={(e) => setNewMapping(prev => ({...prev, surface: e.target.value}))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono"
+                    placeholder="e.g., p"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Elementary Form</label>
+                  <input
+                    type="text"
+                    value={newMapping.elementary}
+                    onChange={(e) => setNewMapping(prev => ({...prev, elementary: e.target.value}))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono"
+                    placeholder="e.g., wk"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                  <input
+                    type="text"
+                    value={newMapping.notes}
+                    onChange={(e) => setNewMapping(prev => ({...prev, notes: e.target.value}))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="Optional description"
+                  />
+                </div>
+              </div>
+              <div className="px-6 py-4 bg-gray-50 border-t rounded-b-lg flex justify-end space-x-2">
+                <button
+                  onClick={() => setShowAddMapping(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={addMapping}
+                  disabled={!newMapping.surface.trim() || !newMapping.elementary.trim()}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Add Mapping
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Tab Components
   const OverviewTab = () => {
@@ -658,14 +1195,8 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                     <tr key={lang.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900">{lang.name}</div>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                            lang.complexity === 'Simple' ? 'bg-green-100 text-green-800' :
-                            lang.complexity === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {lang.complexity}
-                          </span>
+                        <div className="text-sm text-gray-500">
+                          {lang.family.split(' ')[0]}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">{lang.family}</td>
@@ -680,19 +1211,19 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
                         <div className="flex space-x-2">
                           <button 
                             onClick={() => setSelectedLanguage(lang)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm"
+                            className="text-blue-600 hover:text-blue-900 font-medium"
                           >
                             Details
                           </button>
                           <button 
                             onClick={() => runValidation(lang.id)}
-                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm"
+                            className="text-green-600 hover:text-green-900 font-medium"
                           >
                             Validate
                           </button>
                           <button
                             onClick={() => deleteLanguage(lang.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm"
+                            className="text-red-600 hover:text-red-900 font-medium"
                           >
                             Delete
                           </button>
@@ -891,17 +1422,15 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
     </div>
   );
 
-  // Overview Detail Modal with search, pagination, and filtering
+  // Overview Detail Modal
   const OverviewDetailModal = ({ type, onClose }) => {
     const stats = getOverviewStats();
     const [localSearchTerm, setLocalSearchTerm] = useState('');
-    const [filterType, setFilterType] = useState('all'); // 'all', 'vowels', 'consonants'
+    const [filterType, setFilterType] = useState('all');
     
-    // Define vowels and consonants for filtering
     const vowels = ['a', 'e', 'i', 'o', 'u', 'æ', 'ɑ', 'ɛ', 'ɪ', 'ɒ', 'ɔ', 'ʊ', 'ʌ', 'ə', 'ɜ'];
     
     const isVowel = (phoneme) => {
-      // Remove any diacritics and check if it's a vowel
       const clean = phoneme.replace(/[ːˑ̥̃̊]/g, '').toLowerCase();
       return vowels.some(v => clean.includes(v)) || 
              /^[aeiouæɑɛɪɒɔʊʌəɜ]/.test(clean);
@@ -924,7 +1453,6 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
           items = [];
       }
 
-      // Apply filtering for surface phonemes
       if (type === 'surface' && filterType !== 'all') {
         items = items.filter(([phoneme]) => {
           if (filterType === 'vowels') return isVowel(phoneme);
@@ -933,7 +1461,6 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
         });
       }
 
-      // Apply search filter
       items = items.filter(([item]) => 
         item.toLowerCase().includes(localSearchTerm.toLowerCase())
       ).sort(([a], [b]) => a.localeCompare(b));
@@ -979,7 +1506,6 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
           <div className="px-6 py-4 border-b bg-gray-50 flex-shrink-0">
             <p className="text-gray-600 mb-3">{content.totalCount} total {type} across all languages</p>
             
-            {/* Filter buttons for surface phonemes */}
             {type === 'surface' && (
               <div className="flex space-x-2 mb-3">
                 <button
@@ -1048,459 +1574,10 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
     );
   };
 
-  // Language Detail Modal with editing and table/list views - enhanced
-  const LanguageDetailModal = ({ language, onClose }) => {
-    const [localSelectedSegment, setLocalSelectedSegment] = useState(null);
-    const [localSelectedFeature, setLocalSelectedFeature] = useState(null);
-    const [localFeatureState, setLocalFeatureState] = useState('plus');
-    const [viewMode, setViewMode] = useState('list');
-    const [editing, setEditing] = useState(null);
-    const [newMapping, setNewMapping] = useState({ surface: '', elementary: '', notes: '' });
-    const [showAddMapping, setShowAddMapping] = useState(false);
-
-    const handleClose = () => {
-      setLocalSelectedSegment(null);
-      setLocalSelectedFeature(null);
-      setLocalFeatureState('plus');
-      setEditing(null);
-      setNewMapping({ surface: '', elementary: '', notes: '' });
-      setShowAddMapping(false);
-      onClose();
-    };
-
-    const handleFeatureClick = (feature) => {
-      if (localSelectedFeature === feature) {
-        if (localFeatureState === 'plus') {
-          setLocalFeatureState('minus');
-        } else if (localFeatureState === 'minus') {
-          setLocalSelectedFeature(null);
-          setLocalFeatureState('plus');
-        }
-      } else {
-        setLocalSelectedFeature(feature);
-        setLocalFeatureState('plus');
-      }
-    };
-
-    const handleSegmentClick = (segment) => {
-      setLocalSelectedSegment(localSelectedSegment === segment ? null : segment);
-    };
-
-    const getHighlightedSegments = () => {
-      if (!localSelectedFeature || !language) return [];
-      
-      return (language.elementarySegments || []).filter(segment => {
-        const segmentFeature = segmentFeatures[segment]?.[localSelectedFeature];
-        if (localFeatureState === 'plus') return segmentFeature === '+';
-        if (localFeatureState === 'minus') return segmentFeature === '-';
-        return false;
-      });
-    };
-
-    const highlightedSegments = getHighlightedSegments();
-    const currentLanguage = editing || language;
-
-    const startEditing = () => setEditing({...language});
-    const saveEditing = () => {
-      console.log('Saving:', editing); // Add this line
-      setLanguages(prev => prev.map(lang => 
-        lang.id === editing.id ? editing : lang
-      ));
-      setEditing(null);
-    };
-    const cancelEditing = () => setEditing(null);
-
-    const updateField = (field, value) => {
-      setEditing(prev => ({...prev, [field]: value}));
-    };
-
-    const updateMapping = (index, field, value) => {
-      setEditing(prev => ({
-        ...prev,
-        surfaceMappings: prev.surfaceMappings.map((mapping, idx) =>
-          idx === index ? {...mapping, [field]: value} : mapping
-        )
-      }));
-    };
-
-    const addMapping = () => {
-      if (!newMapping.surface.trim() || !newMapping.elementary.trim()) return;
-      
-      setEditing(prev => ({
-        ...prev,
-        surfaceMappings: [...(prev.surfaceMappings || []), { ...newMapping }]
-      }));
-      setNewMapping({ surface: '', elementary: '', notes: '' });
-      setShowAddMapping(false);
-    };
-
-    const deleteMapping = (index) => {
-      setEditing(prev => ({
-        ...prev,
-        surfaceMappings: prev.surfaceMappings.filter((_, idx) => idx !== index)
-      }));
-    };
-
-    return (
-      <div 
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        onClick={handleClose}
-      >
-        <div 
-          className="bg-white rounded-xl shadow-2xl max-w-7xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl flex items-center justify-between flex-shrink-0">
-            <h3 className="text-xl font-semibold">{currentLanguage.name} Analysis</h3>
-            <div className="flex items-center space-x-3">
-              {editing ? (
-                <>
-                  <button
-                    onClick={saveEditing}
-                    className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors shadow-md"
-                  >
-                    <Save className="w-4 h-4 mr-1" />
-                    Save
-                  </button>
-                  <button
-                    onClick={cancelEditing}
-                    className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={startEditing}
-                  className="flex items-center px-4 py-2 bg-white bg-opacity-20 text-white rounded-lg font-medium hover:bg-opacity-30 transition-colors"
-                >
-                  <Edit2 className="w-4 h-4 mr-1" />
-                  Edit
-                </button>
-              )}
-              <button
-                onClick={handleClose}
-                className="text-blue-100 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-          
-          <div className="p-6 overflow-y-auto flex-1">
-            <div className="grid grid-cols-2 gap-8 mb-8">
-              <div className="space-y-6">
-                <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl border border-gray-200">
-                  <h4 className="font-semibold text-gray-900 mb-4">Language Information</h4>
-                  <div className="text-sm space-y-3">
-                    <div className="flex items-center">
-                      <strong className="text-gray-700 w-24">Family:</strong> 
-                      {editing ? 
-                        <input
-                          value={editing.family}
-                          onChange={(e) => updateField('family', e.target.value)}
-                          className="ml-2 px-3 py-1 border border-gray-300 rounded-lg text-sm flex-1 focus:ring-2 focus:ring-blue-500"
-                        /> : 
-                        <span className="text-gray-900">{currentLanguage.family}</span>
-                      }
-                    </div>
-                    <div><strong className="text-gray-700">Surface Phonemes:</strong> <span className="text-blue-600 font-semibold">{currentLanguage.surfacePhonemes?.length || 0}</span></div>
-                    <div><strong className="text-gray-700">Elementary Segments:</strong> <span className="text-purple-600 font-semibold">{currentLanguage.elementarySegments?.length || 0}</span></div>
-                    <div><strong className="text-gray-700">Binary Features:</strong> <span className="text-green-600 font-semibold">{currentLanguage.features}</span></div>
-                    <div><strong className="text-gray-700">Suprasegmentals:</strong> <span className="font-mono">{(currentLanguage.suprasegmentals || []).join(', ') || 'None'}</span></div>
-                    {currentLanguage.dialectNotes && (
-                      <div className="pt-2">
-                        <strong className="text-gray-700">Dialect Notes:</strong> 
-                        {editing ?
-                          <textarea
-                            value={editing.dialectNotes}
-                            onChange={(e) => updateField('dialectNotes', e.target.value)}
-                            className="ml-2 px-3 py-2 border border-gray-300 rounded-lg text-sm w-full mt-1 focus:ring-2 focus:ring-blue-500"
-                            rows="3"
-                          /> : 
-                          <p className="text-gray-600 mt-1">{currentLanguage.dialectNotes}</p>
-                        }
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border border-purple-200">
-                  <h4 className="font-semibold text-gray-900 mb-4">Elementary Segments (Click to see features)</h4>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {(currentLanguage.elementarySegments || []).map(segment => {
-                      const isHighlighted = highlightedSegments.includes(segment);
-                      return (
-                        <button
-                          key={segment}
-                          onClick={() => handleSegmentClick(segment)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all shadow-sm ${
-                            localSelectedSegment === segment 
-                              ? 'bg-blue-500 text-white shadow-md' 
-                              : isHighlighted
-                              ? 'bg-yellow-200 text-yellow-900 border border-yellow-300'
-                              : 'bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200'
-                          }`}
-                        >
-                          /{segment}/
-                        </button>
-                      );
-                    })}
-                  </div>
-                  
-                  {/* Interactive feature display */}
-                  <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <h5 className="font-medium text-sm mb-3 text-gray-900">
-                      Binary Features (Click to highlight segments)
-                      {localSelectedFeature && (
-                        <span className="ml-2 text-xs text-gray-600 bg-yellow-100 px-2 py-1 rounded">
-                          Showing {localFeatureState === 'plus' ? '+' : '-'}{localSelectedFeature}
-                        </span>
-                      )}
-                    </h5>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {allBinaryFeatures.map(feature => {
-                        const segmentFeature = localSelectedSegment ? segmentFeatures[localSelectedSegment]?.[feature] : null;
-                        const isActiveForSegment = segmentFeature && segmentFeature !== '±';
-                        const isSelectedFeature = localSelectedFeature === feature;
-                        
-                        return (
-                          <button
-                            key={feature}
-                            onClick={() => handleFeatureClick(feature)}
-                            className={`px-2 py-1 rounded-md transition-all text-left font-medium ${
-                              isSelectedFeature
-                                ? `bg-yellow-300 text-yellow-900 shadow-md`
-                                : isActiveForSegment
-                                ? 'bg-blue-100 text-blue-800 hover:bg-blue-200 border border-blue-200'
-                                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                            }`}
-                          >
-                            {isActiveForSegment && localSelectedSegment ? `${segmentFeature}${feature}` : feature}
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-3 p-2 bg-gray-50 rounded">
-                      {localSelectedSegment ? 
-                        `Features for /${localSelectedSegment}/` : 
-                        "Click a segment above to see its features, or click features to highlight segments"
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-              <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-gray-900">Surface Mappings ({currentLanguage.surfaceMappings?.length || 0} total)</h4>
-                  <div className="flex items-center space-x-3">
-                    {editing && (
-                      <button
-                        onClick={() => setShowAddMapping(true)}
-                        className="flex items-center px-3 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
-                      >
-                        <Plus className="w-4 h-4 mr-1" />
-                        Add Mapping
-                      </button>
-                    )}
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => setViewMode('list')}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          viewMode === 'list' 
-                            ? 'bg-blue-500 text-white shadow-md' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        List View
-                      </button>
-                      <button
-                        onClick={() => setViewMode('table')}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          viewMode === 'table' 
-                            ? 'bg-blue-500 text-white shadow-md' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        Grid View
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                {viewMode === 'list' ? (
-                  <div className="overflow-x-auto max-h-96">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="sticky top-0 bg-gray-50">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                          {editing && (
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200 bg-white">
-                        {(currentLanguage.surfaceMappings || []).map((mapping, idx) => (
-                          <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 text-sm font-mono">
-                              {editing ? (
-                                <input
-                                  value={mapping.surface}
-                                  onChange={(e) => updateMapping(idx, 'surface', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium">/{mapping.surface}/</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-sm font-mono">
-                              {editing ? (
-                                <input
-                                  value={mapping.elementary}
-                                  onChange={(e) => updateMapping(idx, 'elementary', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">/{mapping.elementary}/</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-sm">
-                              {editing ? (
-                                <input
-                                  value={mapping.notes || mapping.rule || ''}
-                                  onChange={(e) => updateMapping(idx, 'notes', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="text-gray-600">{mapping.notes || mapping.rule}</span>
-                              )}
-                            </td>
-                            {editing && (
-                              <td className="px-4 py-3 text-sm">
-                                <button
-                                  onClick={() => deleteMapping(idx)}
-                                  className="text-red-600 hover:text-red-800 font-medium"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </td>
-                            )}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-96 overflow-y-auto">
-                    <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-lg border border-blue-200">
-                      <h5 className="font-medium mb-3 text-blue-900">Surface Inventory</h5>
-                      <div className="grid grid-cols-6 gap-2">
-                        {(currentLanguage.surfacePhonemes || []).map(phoneme => (
-                          <div key={phoneme} className="text-center text-sm font-mono bg-white p-2 rounded border border-blue-200 shadow-sm">
-                            /{phoneme}/
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-lg border border-purple-200">
-                      <h5 className="font-medium mb-3 text-purple-900">Elementary Inventory</h5>
-                      <div className="grid grid-cols-4 gap-2">
-                        {(currentLanguage.elementarySegments || []).map(segment => (
-                          <div key={segment} className="text-center text-sm font-mono bg-white p-2 rounded border border-purple-200 shadow-sm">
-                            /{segment}/
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Add Mapping Modal */}
-        {showAddMapping && editing && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-60"
-            onClick={() => setShowAddMapping(false)}
-          >
-            <div 
-              className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="px-6 py-4 bg-gray-50 border-b rounded-t-lg">
-                <h4 className="text-lg font-semibold text-gray-900">Add Surface Mapping</h4>
-              </div>
-              <div className="p-6 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Surface Phoneme</label>
-                  <input
-                    type="text"
-                    value={newMapping.surface}
-                    onChange={(e) => setNewMapping(prev => ({...prev, surface: e.target.value}))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono"
-                    placeholder="e.g., p"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Elementary Form</label>
-                  <input
-                    type="text"
-                    value={newMapping.elementary}
-                    onChange={(e) => setNewMapping(prev => ({...prev, elementary: e.target.value}))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono"
-                    placeholder="e.g., wk"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                  <input
-                    type="text"
-                    value={newMapping.notes}
-                    onChange={(e) => setNewMapping(prev => ({...prev, notes: e.target.value}))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Optional description"
-                  />
-                </div>
-              </div>
-              <div className="px-6 py-4 bg-gray-50 border-t rounded-b-lg flex justify-end space-x-2">
-                <button
-                  onClick={() => setShowAddMapping(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={addMapping}
-                  disabled={!newMapping.surface.trim() || !newMapping.elementary.trim()}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Add Mapping
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Comprehensive Phonemic Analysis System
           </h1>
           <p className="text-gray-600 text-lg">
@@ -1508,8 +1585,8 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
           </p>
         </div>
 
-        <div className="mb-8">
-          <nav className="flex flex-wrap gap-2">
+        <div className="mb-6">
+          <nav className="flex space-x-8">
             {[
               { id: 'overview', name: 'Overview', icon: Database },
               { id: 'validation', name: 'Validation', icon: CheckCircle },
@@ -1519,10 +1596,10 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center px-6 py-3 rounded-xl text-sm font-medium transition-all shadow-sm ${
+                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
                   activeTab === id
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 <Icon className="w-4 h-4 mr-2" />
@@ -1555,7 +1632,6 @@ English,Indo-European,en,52.0,-1.0,"æ æː ɑː ɒ ɒː ɔː ɪ ɛ ʌ ʊ eɪ ə
         )}
 
         {showAddLanguage && <AddLanguageModal />}
-      </div>
     </div>
   );
 };
