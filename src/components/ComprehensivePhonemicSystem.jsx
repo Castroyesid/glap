@@ -727,36 +727,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl flex items-center justify-between flex-shrink-0">
             <h3 className="text-xl font-semibold">{currentLanguage.name} Analysis</h3>
             <div className="flex items-center space-x-3">
-              {editing ? (
-                <>
-                  <button
-                    onClick={saveEditing}
-                    className="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors shadow-md"
-                  >
-                    <Save className="w-4 h-4 mr-1" />
-                    Save
-                  </button>
-                  <button
-                    onClick={cancelEditing}
-                    className="flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={startEditing}
-                  className="flex items-center px-4 py-2 bg-white bg-opacity-20 text-white rounded-lg font-medium hover:bg-opacity-30 transition-colors"
-                >
-                  <Edit2 className="w-4 h-4 mr-1" />
-                  Edit
-                </button>
-              )}
-              <button
-                onClick={handleClose}
-                className="text-blue-100 hover:text-white transition-colors"
-              >
+              <button onClick={handleClose}>
                 <X className="w-6 h-6" />
               </button>
             </div>
