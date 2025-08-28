@@ -576,7 +576,12 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
 
     const usedFeatures = getUsedFeatures();
 
+    const handleViewChange = (mode) => {
+      console.log('View mode:', mode);
+      setViewMode(mode);
+    }
     const handleFeatureClick = (feature) => {
+      console.log('Feature clicked:', feature);
       if (!usedFeatures.has(feature)) return;
       
       setLocalSelectedSegment(null);
@@ -594,6 +599,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
     };
 
     const handleSegmentClick = (segment) => {
+      console.log('Segment clicked:', segment);
       setLocalSelectedFeature(null);
       setLocalFeatureState('plus');
       setLocalSelectedSegment(localSelectedSegment === segment ? null : segment);
@@ -794,6 +800,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                 <button
                   key={segment}
                   className="px-3 py-2 rounded-lg text-sm font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200 transition-all shadow-sm"
+                  onClick={() => handleSegmentClick(segment)}
                 >
                   /{segment}/
                 </button>
@@ -806,6 +813,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                 <button
                   key={feature}
                   className="px-2 py-1 rounded-md transition-all text-left font-medium bg-gray-100 text-gray-800 hover:bg-gray-200"
+                  onClick={() => handleFeatureClick(feature)}
                 >
                   {feature}
                 </button>
@@ -817,13 +825,13 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
     </div>
 
     {/* Right Column - Surface Mappings */}
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm" onClick={(e) => e.stopPropagation()}>
       <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h4 className="font-semibold text-gray-900">Surface Mappings ({language.surfaceMappings?.length || 0} total)</h4>
           <div className="flex space-x-2">
-            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-500 text-white shadow-md">List View</button>
-            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300">Grid View</button>
+            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-500 text-white shadow-md" onClick={() => handleViewChange('list')}>List View</button>
+            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300" onClick={() => handleViewChange('grid')}>Grid View</button>
           </div>
         </div>
       </div>
