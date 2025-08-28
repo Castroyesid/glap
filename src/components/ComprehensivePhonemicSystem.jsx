@@ -1014,7 +1014,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                                 <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">/{mapping.elementary}/</span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-sm">
+                            <td className="px-4 py-3 text-sm text-right">
                               {editing ? (
                                 <input
                                   value={mapping.notes || mapping.rule || ''}
@@ -1026,7 +1026,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                               )}
                             </td>
                             {editing && (
-                              <td className="px-4 py-3 text-sm">
+                              <td className="px-4 py-3 text-sm text-right">
                                 <button
                                   onClick={() => deleteMapping(idx)}
                                   className="text-red-600 hover:text-red-800 font-medium"
@@ -1145,11 +1145,13 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
         {/* Header Section */}
         <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-8 rounded-xl border border-blue-100 shadow-sm">
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
-            Elementary Phonemic Analysis Project
+            Statistics
           </h3>
+          {/*
           <p className="text-gray-600 mb-6">
             Systematic decomposition and comparison of phonemic inventories across natural languages
           </p>
+          */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <button 
               onClick={scrollToLanguageInventory}
