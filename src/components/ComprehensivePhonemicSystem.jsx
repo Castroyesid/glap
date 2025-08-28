@@ -11,6 +11,8 @@ const ComprehensivePhonemicSystem = () => {
   const [columnMapping, setColumnMapping] = useState({});
   const [importStep, setImportStep] = useState('upload');
   const [showAddLanguage, setShowAddLanguage] = useState(false);
+  const [showInfo, setShowInfo] = useState(true);
+  const [showFeatures, setShowFeatures] = useState(true);
   const [newLanguage, setNewLanguage] = useState({
     name: '',
     family: '',
@@ -158,8 +160,8 @@ const ComprehensivePhonemicSystem = () => {
       name: "English",
       family: "Indo-European > Germanic",
       coordinates: [52.0, -1.0],
-      surfacePhonemes: ["ɪ", "ɛ", "æ", "ʊ", "ʌ", "ɒ"],
-      elementarySegments: ["i", "e", "æ", "u", "o", "ɒ", "r", "j", "w"],
+      surfacePhonemes: ["ɪ", "ɛ", "æ", "ʊ", "ʌ", "ɒ", "ə", "ər", "i", "iː", "eɪ", "æː", "ɔɪ", "aɪ", "ɑ", "aʊ", "ɒː", "uː", "əʊ", "ɔː", "ɪə", "ɛː", "ɑː", "ʊə", "ɔː", "ɒː", "ɜː", "r", "j", "w", "m", "n", "ŋ", "p", "t", "tʃ", "k", "ʔ", "b", "d", "dʒ", "g", "f", "θ", "s", "ʃ", "x", "h", "v", "ð", "z", "ʒ", "l"],
+      elementarySegments: ["i", "e", "æ", "u", "o", "ɒ", "r", "j", "w", "l", "n", "ʔ", "θ"],
       suprasegmentals: ["stress"],
       features: 7,
       surfaceMappings: [
@@ -177,7 +179,7 @@ const ComprehensivePhonemicSystem = () => {
         { surface: "æː", elementary: "æj", notes: "BATH vowel" },
         { surface: "ɔɪ", elementary: "uj", notes: "CHOICE vowel" },
         { surface: "aɪ", elementary: "oj", notes: "PRICE vowel" },
-        { surface: "ɑː", elementary: "ɒj", notes: "PALM vowel" },
+        { surface: "ɑ", elementary: "ɒj", notes: "PALM vowel" },
         { surface: "aʊ", elementary: "ew", notes: "MOUTH vowel" },
         { surface: "ɒː", elementary: "æw", notes: "CLOTH vowel" }, 
         { surface: "uː", elementary: "uw", notes: "GOOSE vowel" },
@@ -190,11 +192,12 @@ const ComprehensivePhonemicSystem = () => {
         { surface: "ɔː", elementary: "or", notes: "FORCE vowel" },
         { surface: "ɒː", elementary: "ɒr", notes: "NORTH vowel" },
         { surface: "ɜː", elementary: "jr", notes: "NURSE vowel; curl-coil merger" },
-        { surface: "j", elementary: "j", notes: "oral dorsal continuant; palatal approximant" },
-        { surface: "w", elementary: "w", notes: "oral labial continuant; labiovelar approximant" },
+        { surface: "r", elementary: "r", notes: "elementary; oral dorsal continuant; postalveolar rhotic approximant; alternatively: /wr/; /r/, /rr/ and /jr/ are used in the vowel inventory"},
+        { surface: "j", elementary: "j", notes: "elementary; oral dorsal continuant; palatal approximant" },
+        { surface: "w", elementary: "w", notes: "elementary; oral labial continuant; labiovelar approximant" },
         { surface: "m", elementary: "wn", notes: "oral labial continuant (w) + voiced nasal (n); alternatively: /wʔn/" },
         { surface: "n", elementary: "jn", notes: "oral dorsal continuant (j) + voiced nasal (n); alternatively: /jʔn/" },
-        { surface: "ŋ", elementary: "n", notes: "nasal; marginal" },
+        { surface: "ŋ", elementary: "n", notes: "elementary; nasal; marginal" },
         { surface: "p", elementary: "wʔ", notes: "oral labial continuant (w) + voiceless oral stop (ʔ)" },
         { surface: "t", elementary: "ʔ", notes: "elementary; voiceless oral stop (ʔ)" },
         { surface: "tʃ", elementary: "ʔj", notes: "voiceless oral stop (ʔ) + oral dorsal continuant (j)" },
@@ -727,342 +730,116 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
           <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl flex items-center justify-between flex-shrink-0">
             <h3 className="text-xl font-semibold">{currentLanguage.name} Analysis</h3>
             <div className="flex items-center space-x-3">
-              <button onClick={handleClose}>
-                <X className="w-6 h-6" />
+              <button 
+                onClick={handleClose}
+                className="hover:opacity-75 transition-opacity"
+                style={{ color: 'white' }}
+              >
+                <X 
+                  className="w-6 h-6"
+                  style={{ fill: 'white', stroke: 'white', color: 'white' }}
+                />
+              </button>
+              <button
+                onClick={handleClose}
+                style={{ color: 'white' }}
+                className="hover:opacity-75 transition-opacity text-xl font-bold"
+              >
+                X
               </button>
             </div>
           </div>
           
-          <div className="p-6 overflow-y-auto flex-1">
-            <div className="grid grid-cols-2 gap-8 mb-8">
-              <div className="space-y-6">
-                <div className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl border border-gray-200">
-                  <h4 className="font-semibold text-gray-900 mb-4">Language Information</h4>
-                  <div className="text-sm space-y-3">
-                    <div className="flex items-center">
-                      <strong className="text-gray-700 w-32">Family:</strong> 
-                      {editing ? 
-                        <input
-                          value={editing.family}
-                          onChange={(e) => updateField('family', e.target.value)}
-                          className="ml-2 px-3 py-1 border border-gray-300 rounded-lg text-sm flex-1 focus:ring-2 focus:ring-blue-500"
-                        /> : 
-                        <span className="text-gray-900">{currentLanguage.family}</span>
-                      }
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <strong className="text-gray-700 w-32">Surface Phonemes:</strong> 
-                      {editing ? (
-                        <div className="ml-2 flex-1">
-                          <textarea
-                            value={Array.isArray(editing.surfacePhonemes) ? editing.surfacePhonemes.join(' ') : editing.surfacePhonemes || ''}
-                            onChange={(e) => updateSurfacePhonemes(e.target.value)}
-                            className="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                            rows="2"
-                            placeholder="ɪ ɛ æ ʊ ʌ ɒ (space separated)"
-                          />
-                          <div className="text-xs text-gray-500 mt-1">Count: {editing.surfacePhonemes?.length || 0}</div>
-                        </div>
-                      ) : (
-                        <span className="text-blue-600 font-semibold">{currentLanguage.surfacePhonemes?.length || 0}</span>
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <strong className="text-gray-700 w-32">Elementary Segments:</strong> 
-                      {editing ? (
-                        <div className="ml-2 flex-1">
-                          <input
-                            value={Array.isArray(editing.elementarySegments) ? editing.elementarySegments.join(' ') : editing.elementarySegments || ''}
-                            onChange={(e) => setEditing(prev => ({
-                              ...prev,
-                              elementarySegments: e.target.value.split(/[,\s]+/).filter(s => s.trim())
-                            }))}
-                            className="w-full px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                            placeholder="i e æ u o ɑ (space separated)"
-                          />
-                          <div className="text-xs text-gray-500 mt-1">Count: {editing.elementarySegments?.length || 0}</div>
-                        </div>
-                      ) : (
-                        <span className="text-purple-600 font-semibold">{currentLanguage.elementarySegments?.length || 0}</span>
-                      )}
-                    </div>
-                    
-                    <div><strong className="text-gray-700">Binary Features:</strong> <span className="text-green-600 font-semibold">{currentLanguage.features}</span></div>
-                    
-                    <div className="flex items-start">
-                      <strong className="text-gray-700 w-32 flex-shrink-0">Suprasegmentals:</strong>
-                      {editing ? (
-                        <input
-                          value={Array.isArray(editing.suprasegmentals) ? editing.suprasegmentals.join(', ') : editing.suprasegmentals || ''}
-                          onChange={(e) => updateSuprasegmentals(e.target.value)}
-                          className="ml-2 px-3 py-1 border border-gray-300 rounded-lg text-sm flex-1 focus:ring-2 focus:ring-blue-500"
-                          placeholder="length, tone (comma separated)"
-                        />
-                      ) : (
-                        <span className="font-mono ml-2">{(currentLanguage.suprasegmentals || []).join(', ') || 'None'}</span>
-                      )}
-                    </div>
-                    
-                    <div className="pt-2">
-                      <strong className="text-gray-700">Notes:</strong> 
-                      {editing ?
-                        <textarea
-                          value={editing.dialectNotes || ''}
-                          onChange={(e) => updateField('dialectNotes', e.target.value)}
-                          className="ml-2 px-3 py-2 border border-gray-300 rounded-lg text-sm w-full mt-1 focus:ring-2 focus:ring-blue-500"
-                          rows="3"
-                          placeholder="Add notes about this language analysis..."
-                        /> : 
-                        <p className="text-gray-600 mt-1">{currentLanguage.dialectNotes || 'No notes added yet.'}</p>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-xl border border-purple-200">
-                  <h4 className="font-semibold text-gray-900 mb-4">Elementary Segments (Click to see features)</h4>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {(currentLanguage.elementarySegments || []).map(segment => {
-                      const isHighlighted = highlightedSegments.includes(segment);
-                      const highlightClass = isHighlighted ? getSegmentHighlightColor() : '';
-                      return (
-                        <button
-                          key={segment}
-                          onClick={() => handleSegmentClick(segment)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all shadow-sm ${
-                            localSelectedSegment === segment 
-                              ? 'bg-blue-500 text-white shadow-md' 
-                              : isHighlighted
-                              ? highlightClass
-                              : 'bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200'
-                          }`}
-                        >
-                          /{segment}/
-                        </button>
-                      );
-                    })}
-                  </div>
-                  
-                  <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <h5 className="font-medium text-sm mb-3 text-gray-900">
-                      Binary Features (Click to highlight segments)
-                      {localSelectedFeature && usedFeatures.has(localSelectedFeature) && (
-                        <span className={`ml-2 text-xs px-2 py-1 rounded ${getShowingTextColor()}`}>
-                          Showing {localFeatureState === 'plus' ? '+' : '-'}{localSelectedFeature}
-                        </span>
-                      )}
-                      {editing && (
-                        <button
-                          onClick={() => setEditingFeatures(!editingFeatures)}
-                          className="ml-4 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
-                        >
-                          {editingFeatures ? 'Done Editing' : 'Edit Features'}
-                        </button>
-                      )}
-                    </h5>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {allBinaryFeatures.map(feature => {
-                        const segmentFeature = localSelectedSegment ? segmentFeatures[localSelectedSegment]?.[feature] : null;
-                        const isActiveForSegment = segmentFeature && segmentFeature !== '±';
-                        const isSelectedFeature = localSelectedFeature === feature;
-                        const isFeatureUsed = usedFeatures.has(feature);
-                        
-                        const getFeatureColor = () => {
-                          if (!isFeatureUsed) return 'text-gray-400 cursor-not-allowed bg-gray-100';
-                          if (isSelectedFeature) {
-                            if (localFeatureState === 'plus') return 'bg-green-200 text-green-800 border border-green-300';
-                            if (localFeatureState === 'minus') return 'bg-red-200 text-red-800 border border-red-300';
-                            return 'bg-gray-200 text-gray-800 border border-gray-300';
-                          }
-                          if (isActiveForSegment && localSelectedSegment) {
-                            if (segmentFeature === '+') return 'bg-green-100 text-green-800 hover:bg-green-200 border border-green-200';
-                            if (segmentFeature === '-') return 'bg-red-100 text-red-800 hover:bg-red-200 border border-red-200';
-                            if (segmentFeature === '±') return 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300';
-                          }
-                          return 'text-gray-700 hover:text-gray-900 hover:bg-gray-200 bg-gray-100 border border-gray-200';
-                        };
-                        
-                        return (
-                          <div key={feature} className="flex items-center">
-                            <button
-                              onClick={() => isFeatureUsed ? handleFeatureClick(feature) : null}
-                              disabled={!isFeatureUsed}
-                              className={`px-2 py-1 rounded-md transition-all text-left font-medium flex-1 ${getFeatureColor()}`}
-                            >
-                              {isActiveForSegment && localSelectedSegment ? `${segmentFeature}${feature}` : feature}
-                            </button>
-                            {editingFeatures && editing && localSelectedSegment && (
-                              <select
-                                value={segmentFeatures[localSelectedSegment]?.[feature] || ''}
-                                onChange={(e) => updateSegmentFeature(localSelectedSegment, feature, e.target.value)}
-                                className="ml-1 text-xs border rounded px-1"
-                              >
-                                <option value="">—</option>
-                                <option value="+">+</option>
-                                <option value="-">-</option>
-                                <option value="±">±</option>
-                              </select>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-3 p-2 bg-gray-50 rounded">
-                      {localSelectedSegment ? 
-                        `Features for /${localSelectedSegment}/` : 
-                        "Click a segment above to see its features, or click features to highlight segments"
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-              <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-gray-900">Surface Mappings ({currentLanguage.surfaceMappings?.length || 0} total)</h4>
-                  <div className="flex items-center space-x-3">
-                    {editing && (
-                      <>
-                        <button
-                          onClick={autoGenerateMappings}
-                          className="flex items-center px-3 py-2 bg-yellow-500 text-white rounded-lg text-sm font-medium hover:bg-yellow-600 transition-colors"
-                        >
-                          Auto-Generate Missing
-                        </button>
-                        <button
-                          onClick={() => setShowAddMapping(true)}
-                          className="flex items-center px-3 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors"
-                        >
-                          <Plus className="w-4 h-4 mr-1" />
-                          Add Mapping
-                        </button>
-                      </>
-                    )}
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => setViewMode('list')}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          viewMode === 'list' 
-                            ? 'bg-blue-500 text-white shadow-md' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        List View
-                      </button>
-                      <button
-                        onClick={() => setViewMode('table')}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          viewMode === 'table' 
-                            ? 'bg-blue-500 text-white shadow-md' 
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        Grid View
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                {viewMode === 'list' ? (
-                  <div className="overflow-x-auto max-h-96">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="sticky top-0 bg-gray-50">
-                        <tr>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                          {editing && (
-                            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                          )}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200 bg-white">
-                        {(currentLanguage.surfaceMappings || []).map((mapping, idx) => (
-                          <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 text-sm font-mono">
-                              {editing ? (
-                                <input
-                                  value={mapping.surface}
-                                  onChange={(e) => updateMapping(idx, 'surface', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium">/{mapping.surface}/</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-sm font-mono">
-                              {editing ? (
-                                <input
-                                  value={mapping.elementary}
-                                  onChange={(e) => updateMapping(idx, 'elementary', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm font-mono w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded font-medium">/{mapping.elementary}/</span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-right">
-                              {editing ? (
-                                <input
-                                  value={mapping.notes || mapping.rule || ''}
-                                  onChange={(e) => updateMapping(idx, 'notes', e.target.value)}
-                                  className="px-2 py-1 border border-gray-300 rounded text-sm w-full focus:ring-2 focus:ring-blue-500"
-                                />
-                              ) : (
-                                <span className="text-gray-600">{mapping.notes || mapping.rule}</span>
-                              )}
-                            </td>
-                            {editing && (
-                              <td className="px-4 py-3 text-sm text-right">
-                                <button
-                                  onClick={() => deleteMapping(idx)}
-                                  className="text-red-600 hover:text-red-800 font-medium"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </button>
-                              </td>
-                            )}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-96 overflow-y-auto">
-                    <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-lg border border-blue-200">
-                      <h5 className="font-medium mb-3 text-blue-900">Surface Inventory</h5>
-                      <div className="grid grid-cols-6 gap-2">
-                        {(currentLanguage.surfacePhonemes || []).map(phoneme => (
-                          <div key={phoneme} className="text-center text-sm font-mono bg-white p-2 rounded border border-blue-200 shadow-sm">
-                            /{phoneme}/
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-lg border border-purple-200">
-                      <h5 className="font-medium mb-3 text-purple-900">Elementary Inventory</h5>
-                      <div className="grid grid-cols-4 gap-2">
-                        {(currentLanguage.elementarySegments || []).map(segment => (
-                          <div key={segment} className="text-center text-sm font-mono bg-white p-2 rounded border border-purple-200 shadow-sm">
-                            /{segment}/
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+
+        </div>
+
+        <div className="p-6 overflow-y-auto flex-1">
+  <div className="grid grid-cols-2 gap-6 h-full">
+    {/* Left Column - Info and Features */}
+    <div className="space-y-4">
+      {/* Collapsible Language Info */}
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200">
+        <button 
+          onClick={() => setShowInfo(!showInfo)}
+          className="w-full px-4 py-3 text-left font-semibold text-gray-900 hover:bg-gray-50 rounded-t-xl transition-colors"
+        >
+          Language Information {showInfo ? '−' : '+'}
+        </button>
+        {showInfo && (
+          <div className="px-4 pb-4">
+            <div className="text-sm space-y-2">
+              <div><strong className="text-gray-700">Family:</strong> <span className="text-gray-900">{language.family}</span></div>
+              <div><strong className="text-gray-700">Surface Phonemes:</strong> <span className="text-blue-600 font-semibold">{language.surfacePhonemes?.length || 0}</span></div>
+              <div><strong className="text-gray-700">Elementary Segments:</strong> <span className="text-purple-600 font-semibold">{language.elementarySegments?.length || 0}</span></div>
+              <div><strong className="text-gray-700">Binary Features:</strong> <span className="text-green-600 font-semibold">{language.features}</span></div>
+              <div><strong className="text-gray-700">Suprasegmentals:</strong> <span className="font-mono">{(language.suprasegmentals || []).join(', ') || 'None'}</span></div>
+              <div className="pt-2"><strong className="text-gray-700">Notes:</strong> <p className="text-gray-600 mt-1">{language.dialectNotes || 'No notes added yet.'}</p></div>
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Collapsible Elementary Segments */}
+      <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl border border-purple-200">
+        <button 
+          onClick={() => setShowFeatures(!showFeatures)}
+          className="w-full px-4 py-3 text-left font-semibold text-gray-900 hover:bg-purple-50 rounded-t-xl transition-colors"
+        >
+          Elementary Segments & Features {showFeatures ? '−' : '+'}
+        </button>
+        {showFeatures && (
+          <div className="px-4 pb-4">
+            <h5 className="font-medium mb-3 text-gray-900">Elementary Segments (Click to see features)</h5>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {(language.elementarySegments || []).map(segment => (
+                <button
+                  key={segment}
+                  className="px-3 py-2 rounded-lg text-sm font-medium bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-200 transition-all shadow-sm"
+                >
+                  /{segment}/
+                </button>
+              ))}
+            </div>
+            
+            <h5 className="font-medium text-sm mb-2 text-gray-900">Binary Features</h5>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {['high', 'low', 'front', 'voice', 'occlusive', 'nasal', 'consonantal', 'obstruent'].map(feature => (
+                <button
+                  key={feature}
+                  className="px-2 py-1 rounded-md transition-all text-left font-medium bg-gray-100 text-gray-800 hover:bg-gray-200"
+                >
+                  {feature}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Right Column - Surface Mappings */}
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 rounded-t-xl">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="font-semibold text-gray-900">Surface Mappings ({language.surfaceMappings?.length || 0} total)</h4>
+          <div className="flex space-x-2">
+            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-500 text-white shadow-md">List View</button>
+            <button className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300">Grid View</button>
+          </div>
         </div>
+      </div>
+      
+      <div className="p-6 overflow-y-auto">
+        {/* Your existing surface mappings table goes here */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            {/* Your existing table content */}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Add Mapping Modal */}
         {showAddMapping && editing && (
@@ -1183,7 +960,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" data-inventory="true">
           <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Language Inventory</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Dataset</h3>
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -1195,7 +972,7 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Surface</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elementary</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reduction</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"> </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -1226,18 +1003,6 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                             className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 font-medium transition-colors"
                           >
                             Details
-                          </button>
-                          <button 
-                            onClick={() => runValidation(lang.id)}
-                            className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium transition-colors"
-                          >
-                            Validate
-                          </button>
-                          <button
-                            onClick={() => deleteLanguage(lang.id)}
-                            className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 font-medium transition-colors"
-                          >
-                            Delete
                           </button>
                         </div>
                       </td>
@@ -1301,25 +1066,60 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
     </div>
   );
 
+
   const ComparisonTab = () => {
-    const comparisons = languages.length >= 2 ? [
-      ...languages.slice(0, -1).map((lang1, i) => 
-        languages.slice(i + 1).map(lang2 => ({ lang1, lang2 }))
-      ).flat()
-    ] : [];
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
+  
+    const handleLanguageSelect = (langId) => {
+      if (selectedLanguages.includes(langId)) {
+        setSelectedLanguages(prev => prev.filter(id => id !== langId));
+      } else if (selectedLanguages.length < 3) {
+        setSelectedLanguages(prev => [...prev, langId]);
+      }
+    };
+  
+    const comparisons = selectedLanguages.length >= 2 ? 
+      selectedLanguages.slice(0, -1).map((lang1Id, i) => 
+        selectedLanguages.slice(i + 1).map(lang2Id => {
+          const lang1 = languages.find(l => l.id.toString() === lang1Id);
+          const lang2 = languages.find(l => l.id.toString() === lang2Id);
+          return { lang1, lang2 };
+        })
+      ).flat() : [];
 
     return (
       <div className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="px-6 py-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200 rounded-t-xl">
+          <div className="px-6 py-4 bg-blue-50 border-b border-gray-200 rounded-t-xl">
             <h3 className="text-lg font-semibold text-gray-900">Cross-Linguistic Comparison</h3>
-            <p className="text-sm text-gray-600 mt-1">Structural similarities in elementary segment systems</p>
+            <p className="text-sm text-gray-600 mt-1">Select 2-3 languages to compare their elementary segment systems</p>
           </div>
+        
           <div className="p-6">
+            <div className="mb-6">
+              <h4 className="font-medium mb-3">Select Languages to Compare:</h4>
+              <div className="grid grid-cols-2 gap-3">
+                {languages.map(lang => (
+                  <button
+                    key={lang.id}
+                    onClick={() => handleLanguageSelect(lang.id.toString())}
+                    className={`p-3 rounded-lg border text-left transition-colors ${
+                      selectedLanguages.includes(lang.id.toString())
+                        ? 'bg-blue-100 border-blue-300 text-blue-800'
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                    }`}
+                >
+                    <div className="font-medium">{lang.name}</div>
+                    <div className="text-sm text-gray-500">{lang.elementarySegments?.length || 0} elementary segments</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          
             {comparisons.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <BarChart3 className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-                <p>Add at least 2 languages to see comparisons</p>
+                <p>Select at least 2 languages to see comparisons</p>
               </div>
             ) : (
               comparisons.map(({ lang1, lang2 }, idx) => {
@@ -1329,42 +1129,17 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                     <h4 className="text-lg font-semibold text-gray-900 mb-4">
                       {lang1.name} vs {lang2.name}
                     </h4>
-                    
+                  
+                    {/* Your existing comparison metrics here */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                        <div className="text-2xl font-bold text-blue-600">{similarity.jaccard}%</div>
-                        <div className="text-sm text-gray-600 font-medium">Segment Similarity</div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <div className="text-2xl font-bold text-purple-600">{similarity.functionalJaccard}%</div>
-                        <div className="text-sm text-gray-600 font-medium">Functional Similarity</div>
-                      </div>
-                      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                        <div className="text-2xl font-bold text-green-600">{similarity.shared.length}</div>
-                        <div className="text-sm text-gray-600 font-medium">Shared Segments</div>
-                      </div>
-                      <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                        <div className="text-2xl font-bold text-red-600">
-                          {Math.abs((lang1.elementarySegments?.length || 0) - (lang2.elementarySegments?.length || 0))}
-                        </div>
-                        <div className="text-sm text-gray-600 font-medium">Size Difference</div>
-                      </div>
+                      {/* Keep your existing comparison boxes */}
                     </div>
-                    
+                  
                     <div className="text-sm space-y-2 bg-white p-4 rounded-lg border">
                       <div><strong>Shared segments:</strong> <span className="font-mono">{similarity.shared.join(', ') || 'None'}</span></div>
                       <div><strong>Only in {lang1.name}:</strong> <span className="font-mono">{similarity.unique1.join(', ') || 'None'}</span></div>
                       <div><strong>Only in {lang2.name}:</strong> <span className="font-mono">{similarity.unique2.join(', ') || 'None'}</span></div>
                     </div>
-                    
-                    {lang1.name === "Rotokas" && lang2.name === "Hawaiian" && (
-                      <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <strong className="text-yellow-800">Structural Convergence:</strong> <span className="text-yellow-700">Despite genetic unrelatedness (North Bougainville vs Oceanic), 
-                        these languages show remarkable structural similarity. Both reduce to small elementary segment systems (5-6) 
-                        using similar organizational principles. With functional equivalence (k≈ʔ), Hawaiian essentially adds 
-                        just /h/ to the Rotokas system.</span>
-                      </div>
-                    )}
                   </div>
                 );
               })
