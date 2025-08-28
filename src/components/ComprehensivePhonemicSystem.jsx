@@ -190,8 +190,15 @@ const ComprehensivePhonemicSystem = () => {
         { surface: "ɔː", elementary: "or", notes: "FORCE vowel" },
         { surface: "ɒː", elementary: "ɒr", notes: "NORTH vowel" },
         { surface: "ɜː", elementary: "jr", notes: "NURSE vowel; curl-coil merger" },
-
-      ]
+        { surface: "m", elementary: "wn", notes: "alternatively: /wʔn/" },
+        { surface: "n", elementary: "jn", notes: "alternatively: /jʔn/" },
+        { surface: "ŋ", elementary: "kjn", notes: "alternatively: /ʔn/; marginal" },
+        { surface: "p", elementary: "wʔ", notes: "labial (w) + voiceless stop (ʔ)" },
+        { surface: "t", elementary: "ʔ", notes: "voiceless stop (ʔ)" },
+        { surface: "tʃ", elementary: "ʔj", notes: "voiceless stop (ʔ) + dorsal (j)" },
+        { surface: "k", elementary: "jʔ", notes: "dorsal (j) + voiceless stop (ʔ)" },
+        {}
+        ]
     }
   };
 
@@ -1228,19 +1235,19 @@ English,Indo-European,en,52.0,-1.0,"ɪ ɛ æ ʊ ʌ ɒ","i e æ u o ɒ",length,6,
                         <div className="flex space-x-2">
                           <button 
                             onClick={() => setSelectedLanguage(lang)}
-                            className="text-blue-600 hover:text-blue-900 font-medium"
+                            className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 font-medium transition-colors"
                           >
                             Details
                           </button>
                           <button 
                             onClick={() => runValidation(lang.id)}
-                            className="text-green-600 hover:text-green-900 font-medium"
+                            className="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium transition-colors"
                           >
                             Validate
                           </button>
                           <button
                             onClick={() => deleteLanguage(lang.id)}
-                            className="text-red-600 hover:text-red-900 font-medium"
+                            className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 font-medium transition-colors"
                           >
                             Delete
                           </button>
